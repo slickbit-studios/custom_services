@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:services/util/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'logger.dart';
 
 launchUrl(String url) async {
   try {
