@@ -15,11 +15,7 @@ dependencies:
   firebase_core: ^1.11.0
   firebase_crashlytics: ^2.4.5
   url_launcher: ^6.0.18
-  google_sign_in: ^5.2.3
-  flutter_facebook_auth: ^4.0.1
   crypto: ^3.0.1
-  sign_in_with_apple: ^3.3.0
-  firebase_auth: ^3.3.5
 
 dev_dependencies:
   flutter_test:
