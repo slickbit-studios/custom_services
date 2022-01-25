@@ -32,7 +32,7 @@ class Logger {
 
   void error({String? module, String? message, StackTrace? stack}) {
     _log(severity: "error", module: module, message: message);
-    if (kReleaseMode && checkReportsAccepted()) {
+    if (!kIsWeb && kReleaseMode && checkReportsAccepted()) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
@@ -54,7 +54,7 @@ class Logger {
 
     if (kDebugMode) {
       log(jsonEncode(object));
-    } else if (checkReportsAccepted()) {
+    } else if (!kIsWeb && checkReportsAccepted()) {
       String? uid = await retrieveUserId?.call();
       if (uid != null) {
         FirebaseCrashlytics.instance.setUserIdentifier(uid);

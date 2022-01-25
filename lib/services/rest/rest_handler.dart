@@ -7,7 +7,7 @@ import 'rest_exception.dart';
 
 const String CONTENT_TYPE_JSON = "application/json";
 
-const int DEFAULT_TIMEOUT_SECONDS = 15;
+const Duration DEFAULT_TIMEOUT = Duration(seconds: 15);
 
 class RestHandler {
   final String url;
@@ -17,13 +17,12 @@ class RestHandler {
   Future<http.Response> get({
     String extension = '/',
     Map<String, String>? headers,
-    int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
+    Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
-      http.Response res = await http
-          .get(uri, headers: headers)
-          .timeout(Duration(seconds: timeoutSeconds));
+      http.Response res =
+          await http.get(uri, headers: headers).timeout(timeout);
 
       if (res.statusCode >= 400) {
         throw RestException(
@@ -42,7 +41,7 @@ class RestHandler {
     String extension = '/',
     Map<String, String>? headers,
     Object? body,
-    int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
+    Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
@@ -53,7 +52,7 @@ class RestHandler {
             headers: headers,
             body: jsonEncode(body),
           )
-          .timeout(Duration(seconds: timeoutSeconds));
+          .timeout(timeout);
 
       if (res.statusCode >= 400) {
         throw RestException(
@@ -71,7 +70,7 @@ class RestHandler {
   Future<http.Response> put({
     String extension = '/',
     Map<String, String>? headers,
-    int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
+    Duration timeout = DEFAULT_TIMEOUT,
     Object? body,
   }) async {
     try {
@@ -83,7 +82,7 @@ class RestHandler {
             headers: headers,
             body: jsonEncode(body),
           )
-          .timeout(Duration(seconds: timeoutSeconds));
+          .timeout(timeout);
 
       if (res.statusCode >= 400) {
         throw RestException(
@@ -101,7 +100,7 @@ class RestHandler {
   Future<http.Response> delete({
     String extension = '/',
     Map<String, String>? headers,
-    int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
+    Duration timeout = DEFAULT_TIMEOUT,
     Object? body,
   }) async {
     try {
@@ -113,7 +112,7 @@ class RestHandler {
             headers: headers,
             body: jsonEncode(body),
           )
-          .timeout(Duration(seconds: timeoutSeconds));
+          .timeout(timeout);
 
       if (res.statusCode >= 400) {
         throw RestException(
@@ -131,7 +130,7 @@ class RestHandler {
   Future<http.Response> patch({
     String extension = '/',
     Map<String, String>? headers,
-    int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
+    Duration timeout = DEFAULT_TIMEOUT,
     Object? body,
   }) async {
     Uri uri = Uri.parse(url + extension);
@@ -142,7 +141,7 @@ class RestHandler {
           headers: headers,
           body: jsonEncode(body),
         )
-        .timeout(Duration(seconds: timeoutSeconds));
+        .timeout(timeout);
 
     if (res.statusCode >= 400) {
       throw RestException(
