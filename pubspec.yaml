@@ -5,17 +5,16 @@ homepage: www.slickbit.de
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=2.10.1"
 
 dependencies:
   flutter:
     sdk: flutter
 
   http: ^0.13.4
-  firebase_core: ^1.11.0
-  firebase_crashlytics: ^2.4.5
-  url_launcher: ^6.0.18
-  crypto: ^3.0.1
+  firebase_core: ^1.12.0
+  firebase_crashlytics: ^2.5.1
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

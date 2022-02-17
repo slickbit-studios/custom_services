@@ -33,7 +33,7 @@ class RestHandler {
 
       return res;
     } on TimeoutException catch (_) {
-      throw RestException('Request timed out');
+      throw RestException('Request timed out', timeout: true);
     }
   }
 
@@ -63,7 +63,7 @@ class RestHandler {
 
       return res;
     } on TimeoutException catch (_) {
-      throw RestException('Request timed out');
+      throw RestException('Request timed out', timeout: true);
     }
   }
 
@@ -93,7 +93,7 @@ class RestHandler {
 
       return res;
     } on TimeoutException catch (_) {
-      throw RestException('Request timed out');
+      throw RestException('Request timed out', timeout: true);
     }
   }
 
@@ -123,7 +123,7 @@ class RestHandler {
 
       return res;
     } on TimeoutException catch (_) {
-      throw RestException('Request timed out');
+      throw RestException('Request timed out', timeout: true);
     }
   }
 
