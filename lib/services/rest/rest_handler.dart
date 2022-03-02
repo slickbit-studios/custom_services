@@ -110,7 +110,7 @@ class RestHandler {
           .delete(
             uri,
             headers: headers,
-            body: jsonEncode(body),
+            body: body != null ? jsonEncode(body) : null,
           )
           .timeout(timeout);
 

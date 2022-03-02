@@ -30,25 +30,25 @@ class Logger {
 
   Logger._({required this.checkReportsAccepted, this.retrieveUserId});
 
-  void error({String? module, String? message, StackTrace? stack}) {
+  void error({Type? module, String? message, StackTrace? stack}) {
     _log(severity: "error", module: module, message: message);
     if (!kIsWeb && kReleaseMode && checkReportsAccepted()) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
 
-  void warning({String? module, String? message}) {
+  void warning({Type? module, String? message}) {
     _log(severity: "warn", module: module, message: message);
   }
 
-  void info({String? module, String? message}) {
+  void info({Type? module, String? message}) {
     _log(severity: "info", module: module, message: message);
   }
 
-  void _log({String? severity, String? module, String? message}) async {
+  void _log({String? severity, Type? module, String? message}) async {
     Map<String, String?> object = {
       "severity": severity,
-      "module": module,
+      "module": '$module',
       "message": message
     };
 

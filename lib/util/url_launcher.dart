@@ -1,22 +1,25 @@
 import 'dart:developer';
 
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 import 'logger.dart';
 
-launchUrl(String url) async {
-  try {
-    Logger logger = Logger.instance;
-
+class UrlLauncher {
+  static void launch(String url) async {
     try {
-      await launch(url);
-      logger.info(module: "URL Launcher", message: "URL $url launched");
-    } catch (err) {
-      logger.error(
-          module: "URL Launcher",
-          message: "Unable to launch url $url, error: $err");
+      Logger logger = Logger.instance;
+
+      try {
+        await launcher.launch(url);
+        logger.info(module: UrlLauncher, message: 'URL $url launched');
+      } catch (err) {
+        logger.error(
+          module: UrlLauncher,
+          message: 'Unable to launch url $url, error: $err',
+        );
+      }
+    } catch (error) {
+      log('Error launching url: $error');
     }
-  } catch (error) {
-    log('Error launching url: $error');
   }
 }
