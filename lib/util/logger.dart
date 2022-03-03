@@ -30,30 +30,46 @@ class Logger {
 
   Logger._({required this.checkReportsAccepted, this.retrieveUserId});
 
-  void error({Type? module, String? message, StackTrace? stack}) {
-    _log(severity: "error", module: module, message: message);
+  void error({Type? module, required String message, StackTrace? stack}) {
+    _log(severity: "error", module: module, message: message, stack: stack);
     if (!kIsWeb && kReleaseMode && checkReportsAccepted()) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
 
-  void warning({Type? module, String? message}) {
+  void warning({Type? module, required String message}) {
     _log(severity: "warn", module: module, message: message);
   }
 
-  void info({Type? module, String? message}) {
+  void info({Type? module, required String message}) {
     _log(severity: "info", module: module, message: message);
   }
 
-  void _log({String? severity, Type? module, String? message}) async {
+  void _log({
+    required String severity,
+    Type? module,
+    required String message,
+    StackTrace? stack,
+  }) async {
     Map<String, String?> object = {
       "severity": severity,
       "module": '$module',
-      "message": message
+      "message": message,
     };
 
-    JsonEncoder encoder = JsonEncoder.withIndent(' ');
-    String pretty = encoder.convert(object);
+    object["severity"] = severity;
+
+    if (module != null) {
+      object["module"] = module.toString();
+    }
+
+    object["message"] = message;
+
+    if (stack != null) {
+      object["stack"] = stack.toString();
+    }
+
+    String pretty = JsonEncoder.withIndent(' ').convert(object);
 
     if (kDebugMode) {
       log(pretty);
