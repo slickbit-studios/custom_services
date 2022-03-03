@@ -52,15 +52,18 @@ class Logger {
       "message": message
     };
 
+    JsonEncoder encoder = JsonEncoder.withIndent(' ');
+    String pretty = encoder.convert(object);
+
     if (kDebugMode) {
-      log(jsonEncode(object));
+      log(pretty);
     } else if (!kIsWeb && checkReportsAccepted()) {
       String? uid = await retrieveUserId?.call();
       if (uid != null) {
         FirebaseCrashlytics.instance.setUserIdentifier(uid);
       }
 
-      FirebaseCrashlytics.instance.log(jsonEncode(object));
+      FirebaseCrashlytics.instance.log(pretty);
     }
   }
 }
