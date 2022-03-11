@@ -33,7 +33,6 @@ abstract class SocketConnection {
         }
       } else if (message is MessageEvent) {
         listener.handleMessage(message.data as String);
-        // do nothing
       } else {
         throw 'Unable to handle message of type ${message.runtimeType}';
       }
