@@ -1,15 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:custom_services/services/socket/message_handler.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:universal_html/html.dart';
 
 typedef RequestCallback = void Function(String message);
 
 enum BackendState { STATE_DISCONNECTED, STATE_CONNECTING, STATE_CONNECTED }
 
 abstract class SocketConnection {
-  final VoidCallback? onDisconnected;
+  final void Function()? onDisconnected;
   final List<MessageHandler> _listeners = [];
 
   SocketConnection({this.onDisconnected});
@@ -32,6 +31,9 @@ abstract class SocketConnection {
         if (message.isNotEmpty) {
           listener.handleMessage(String.fromCharCodes(message));
         }
+      } else if (message is MessageEvent) {
+        listener.handleMessage(message.data as String);
+        // do nothing
       } else {
         throw 'Unable to handle message of type ${message.runtimeType}';
       }
