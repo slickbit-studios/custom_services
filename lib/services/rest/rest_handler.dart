@@ -40,7 +40,7 @@ class RestHandler {
   Future<http.Response> post({
     String extension = '/',
     Map<String, String>? headers,
-    Object? body,
+    Object body = const {},
     Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
@@ -71,7 +71,7 @@ class RestHandler {
     String extension = '/',
     Map<String, String>? headers,
     Duration timeout = DEFAULT_TIMEOUT,
-    Object? body,
+    Object body = const {},
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
@@ -101,7 +101,7 @@ class RestHandler {
     String extension = '/',
     Map<String, String>? headers,
     Duration timeout = DEFAULT_TIMEOUT,
-    Object? body,
+    Object body = const {},
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
@@ -110,7 +110,7 @@ class RestHandler {
           .delete(
             uri,
             headers: headers,
-            body: body != null ? jsonEncode(body) : null,
+            body: jsonEncode(body),
           )
           .timeout(timeout);
 
@@ -131,7 +131,7 @@ class RestHandler {
     String extension = '/',
     Map<String, String>? headers,
     Duration timeout = DEFAULT_TIMEOUT,
-    Object? body,
+    Object body = const {},
   }) async {
     Uri uri = Uri.parse(url + extension);
 
