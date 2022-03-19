@@ -53,6 +53,12 @@ class WebSocketConnection extends SocketConnection {
   }
 
   @override
+  void disconnect() {
+    _socket?.close();
+    _state = BackendState.STATE_DISCONNECTED;
+  }
+
+  @override
   void sendMessage(String message) {
     try {
       _socket!.sendString(message);

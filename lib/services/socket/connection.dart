@@ -14,6 +14,7 @@ abstract class SocketConnection {
   SocketConnection({this.onDisconnected});
 
   Future<void> connect();
+  void disconnect();
 
   void registerListener(MessageHandler listener) {
     _listeners.add(listener);
