@@ -12,6 +12,7 @@ class NativeSocketConnection extends SocketConnection {
   final Duration timeout;
   final Duration retryReconnectDuration;
   final int retryAttempts;
+  final Map<String, dynamic> headers;
 
   WebSocket? _socket;
   BackendState _state = BackendState.STATE_DISCONNECTED;
@@ -23,6 +24,7 @@ class NativeSocketConnection extends SocketConnection {
     this.timeout = const Duration(seconds: 20),
     this.retryReconnectDuration = const Duration(seconds: 1),
     this.retryAttempts = 15,
+    this.headers = const {},
   }) : super(onDisconnected: onDisconnected);
 
   @override
@@ -81,7 +83,7 @@ class NativeSocketConnection extends SocketConnection {
     // otherwise connect
     _state = BackendState.STATE_CONNECTING;
 
-    _socket = await WebSocket.connect(url).timeout(timeout);
+    _socket = await WebSocket.connect(url, headers: headers).timeout(timeout);
 
     // set up handler
     _state = BackendState.STATE_CONNECTED;

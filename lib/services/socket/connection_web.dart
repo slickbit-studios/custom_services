@@ -11,6 +11,8 @@ class WebSocketConnection extends SocketConnection {
   final Duration timeout;
   final Duration retryReconnectDuration;
   final int retryAttempts;
+  // is passed in HTTP request as Sec-WebSocket-Protocol header
+  final String? secondaryProtocol;
 
   WebSocket? _socket;
   BackendState _state = BackendState.STATE_DISCONNECTED;
@@ -23,6 +25,7 @@ class WebSocketConnection extends SocketConnection {
     this.timeout = const Duration(seconds: 20),
     this.retryReconnectDuration = const Duration(seconds: 1),
     this.retryAttempts = 15,
+    this.secondaryProtocol,
   }) : super(onDisconnected: onDisconnected);
 
   @override
