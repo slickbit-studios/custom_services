@@ -13,7 +13,7 @@ abstract class SocketConnection {
 
   SocketConnection({this.onDisconnected});
 
-  Future<void> connect();
+  Future<void> connect({String path = ''});
   void disconnect();
 
   void registerListener(MessageHandler listener) {

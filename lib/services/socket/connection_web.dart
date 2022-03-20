@@ -29,12 +29,12 @@ class WebSocketConnection extends SocketConnection {
   }) : super(onDisconnected: onDisconnected);
 
   @override
-  Future<void> connect() async {
+  Future<void> connect({String path = ''}) async {
     int attempt = 0;
 
     while (attempt < retryAttempts) {
       try {
-        await _singleConnectAttempt();
+        await _singleConnectAttempt(path: path);
         return;
       } on TimeoutException catch (_) {
         rethrow;
@@ -45,7 +45,7 @@ class WebSocketConnection extends SocketConnection {
         if (attempt >= retryAttempts) {
           throw SocketException(
             message: 'Failed to connect in $retryAttempts tries',
-            url: url,
+            url: '$url/$path',
           );
         } else {
           // wait before next try
@@ -71,7 +71,7 @@ class WebSocketConnection extends SocketConnection {
     }
   }
 
-  Future<void> _singleConnectAttempt() async {
+  Future<void> _singleConnectAttempt({required String path}) async {
     // if already connected, just perform the connectedCallback
     if (_state == BackendState.STATE_CONNECTED) {
       Logger.instance.info(
@@ -83,7 +83,7 @@ class WebSocketConnection extends SocketConnection {
 
     // otherwise connect
     _state = BackendState.STATE_CONNECTING;
-    _socket = WebSocket(url);
+    _socket = WebSocket('$url/$path');
 
     // check for connection until timeout
     DateTime start = DateTime.now();
@@ -107,7 +107,7 @@ class WebSocketConnection extends SocketConnection {
       } else if (error) {
         _state = BackendState.STATE_DISCONNECTED;
         _socket = null;
-        throw SocketException(message: 'Connection failed', url: url);
+        throw SocketException(message: 'Connection failed', url: '$url/$path');
       } else {
         break;
       }
