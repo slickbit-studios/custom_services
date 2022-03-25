@@ -28,12 +28,12 @@ class NativeSocketConnection extends SocketConnection {
   }) : super(onDisconnected: onDisconnected);
 
   @override
-  Future<void> connect({String path = ''}) async {
+  Future<void> connect({String path = '', Duration? timeout}) async {
     int attempt = 0;
 
     while (attempt < retryAttempts) {
       try {
-        await _singleConnectAttempt(path: path);
+        await _singleConnectAttempt(path: path, timeout: timeout);
         return;
       } on TimeoutException catch (_) {
         rethrow;
@@ -70,7 +70,10 @@ class NativeSocketConnection extends SocketConnection {
     }
   }
 
-  Future<void> _singleConnectAttempt({required String path}) async {
+  Future<void> _singleConnectAttempt({
+    required String path,
+    Duration? timeout,
+  }) async {
     // if already connected, just perform the connectedCallback
     if (_state == BackendState.STATE_CONNECTED) {
       Logger.instance.info(
@@ -86,7 +89,7 @@ class NativeSocketConnection extends SocketConnection {
     _socket = await WebSocket.connect(
       '$url/$path',
       headers: headers,
-    ).timeout(timeout);
+    ).timeout(timeout ?? this.timeout);
 
     // set up handler
     _state = BackendState.STATE_CONNECTED;
