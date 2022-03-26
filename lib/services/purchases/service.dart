@@ -1,14 +1,15 @@
 import 'package:custom_services/services/purchases/exception.dart';
-import 'package:custom_services/services/purchases/listener.dart';
+import 'package:custom_services/services/purchases/handler.dart';
 import 'package:custom_services/services/purchases/product.dart';
+import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 abstract class PurchaseService {
   final List<ProductDetails> _details;
-  final List<PurchaseListener> _listeners;
+  final List<PurchaseHandler> _listeners;
 
   PurchaseService(this._details) : _listeners = [] {
-    purchase.purchaseStream.listen(_onPurchaseUpdated);
+    purchase.purchaseStream.listen(_onPurchasesUpdated);
   }
 
   static InAppPurchase get purchase => InAppPurchase.instance;
@@ -23,12 +24,16 @@ abstract class PurchaseService {
     return res.productDetails;
   }
 
-  void registerListener(PurchaseListener listener) {
+  void addListener(PurchaseHandler listener) {
     _listeners.add(listener);
   }
 
-  void removeListener(PurchaseListener listener) {
+  void removeListener(PurchaseHandler listener) {
     _listeners.remove(listener);
+  }
+
+  Future<void> restore() async {
+    return purchase.restorePurchases();
   }
 
   Future<bool> openBuyDialog(Product product) {
@@ -50,36 +55,48 @@ abstract class PurchaseService {
     }
   }
 
-  void _onPurchaseUpdated(List<PurchaseDetails> purchases) async {
+  void _onPurchasesUpdated(List<PurchaseDetails> purchases) async {
     for (var purchase in purchases) {
+      _onPurchaseUpdated(purchase);
+    }
+  }
+
+  void _onPurchaseUpdated(PurchaseDetails purchase) async {
+    try {
       if (purchase.status == PurchaseStatus.pending) {
         for (var listener in _listeners) {
-          listener.onPurchaseStarted();
+          listener.onPurchaseStarted(PurchaseInfo.of(purchase));
         }
       } else if (purchase.status == PurchaseStatus.canceled) {
         for (var listener in _listeners) {
-          listener.onPurchaseCanceled();
+          listener.onPurchaseCanceled(PurchaseInfo.of(purchase));
         }
       } else if (purchase.status == PurchaseStatus.error) {
         for (var listener in _listeners) {
-          listener.onPurchaseError();
+          listener.onPurchaseError(PurchaseInfo.of(purchase));
         }
       } else if ([PurchaseStatus.purchased, PurchaseStatus.restored]
           .contains(purchase.status)) {
-        if (!await verifyPurchase(purchase)) {
-          for (var listener in _listeners) {
-            listener.onPurchaseError();
-            return;
-          }
-        }
+        bool verified = await verifyPurchase(purchase);
 
+        // call complete purchase even if verification failed
         if (purchase.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchase);
         }
 
-        for (var listener in _listeners) {
-          listener.onPurchaseSuccess();
+        if (verified) {
+          for (var listener in _listeners) {
+            listener.onPurchaseSuccess(PurchaseInfo.of(purchase));
+          }
+        } else {
+          for (var listener in _listeners) {
+            listener.onPurchaseError(PurchaseInfo.of(purchase));
+          }
         }
+      }
+    } catch (err) {
+      for (var listener in _listeners) {
+        listener.onPurchaseError(PurchaseInfo.of(purchase));
       }
     }
   }
