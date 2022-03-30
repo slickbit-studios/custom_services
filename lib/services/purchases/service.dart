@@ -4,6 +4,8 @@ import 'package:custom_services/services/purchases/product.dart';
 import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+enum VerificationStatus { SUCCESS, ERROR, ALREADY_USED }
+
 abstract class PurchaseService {
   final List<ProductDetails> _details;
   final List<PurchaseHandler> _listeners;
@@ -77,16 +79,30 @@ abstract class PurchaseService {
         }
       } else if ([PurchaseStatus.purchased, PurchaseStatus.restored]
           .contains(purchase.status)) {
-        bool verified = await verifyPurchase(purchase);
+        VerificationStatus verification = await verifyPurchase(purchase);
 
-        // call complete purchase even if verification failed
-        if (purchase.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchase);
-        }
+        if ([VerificationStatus.SUCCESS, VerificationStatus.ALREADY_USED]
+            .contains(verification)) {
+          if (purchase.pendingCompletePurchase) {
+            await InAppPurchase.instance.completePurchase(purchase);
+          }
 
-        if (verified) {
-          for (var listener in _listeners) {
-            listener.onPurchaseSuccess(PurchaseInfo.of(purchase));
+          switch (verification) {
+            case VerificationStatus.SUCCESS:
+              for (var listener in _listeners) {
+                listener.onPurchaseSuccess(PurchaseInfo.of(purchase));
+              }
+              return;
+            case VerificationStatus.ERROR:
+              for (var listener in _listeners) {
+                listener.onPurchaseError(PurchaseInfo.of(purchase));
+              }
+              return;
+            case VerificationStatus.ALREADY_USED:
+              for (var listener in _listeners) {
+                listener.onPurchaseAlreadyUsed(PurchaseInfo.of(purchase));
+              }
+              return;
           }
         } else {
           for (var listener in _listeners) {
@@ -103,5 +119,5 @@ abstract class PurchaseService {
 
   /// To be defined in subclass. This method must verify the purchase via
   /// backend and return a bool value that represents if the purchase is valid
-  Future<bool> verifyPurchase(PurchaseDetails purchase);
+  Future<VerificationStatus> verifyPurchase(PurchaseDetails purchase);
 }
