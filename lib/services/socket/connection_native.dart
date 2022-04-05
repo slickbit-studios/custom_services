@@ -55,8 +55,8 @@ class NativeSocketConnection extends SocketConnection {
   }
 
   @override
-  void disconnect() {
-    _socket?.close();
+  void disconnect([int? status]) {
+    _socket?.close(status);
     _state = BackendState.STATE_DISCONNECTED;
   }
 

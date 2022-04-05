@@ -14,7 +14,7 @@ abstract class SocketConnection {
   SocketConnection({this.onDisconnected});
 
   Future<void> connect({String path = ''});
-  void disconnect();
+  void disconnect([int? status]);
 
   void registerListener(MessageHandler listener) {
     _listeners.add(listener);
