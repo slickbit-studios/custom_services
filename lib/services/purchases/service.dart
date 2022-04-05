@@ -1,8 +1,9 @@
 import 'package:custom_services/services/purchases/exception.dart';
 import 'package:custom_services/services/purchases/handler.dart';
 import 'package:custom_services/services/purchases/product.dart';
-import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+
+export 'package:in_app_purchase/in_app_purchase.dart';
 
 enum VerificationStatus { SUCCESS, ERROR, ALREADY_USED }
 
@@ -39,7 +40,8 @@ abstract class PurchaseService {
   }
 
   Future<bool> openBuyDialog(Product product) {
-    ProductDetails details = _findDetails(product);
+    ProductDetails details = getDetails(product);
+    purchase.getPlatformAddition();
     final PurchaseParam param = PurchaseParam(productDetails: details);
 
     if (product.type == ProductType.consumable) {
@@ -49,7 +51,7 @@ abstract class PurchaseService {
     }
   }
 
-  ProductDetails _findDetails(Product product) {
+  ProductDetails getDetails(Product product) {
     try {
       return _details.firstWhere((element) => element.id == product.id);
     } catch (_) {
@@ -67,15 +69,15 @@ abstract class PurchaseService {
     try {
       if (purchase.status == PurchaseStatus.pending) {
         for (var listener in _listeners) {
-          listener.onPurchaseStarted(PurchaseInfo.of(purchase));
+          listener.onPurchaseStarted(purchase);
         }
       } else if (purchase.status == PurchaseStatus.canceled) {
         for (var listener in _listeners) {
-          listener.onPurchaseCanceled(PurchaseInfo.of(purchase));
+          listener.onPurchaseCanceled(purchase);
         }
       } else if (purchase.status == PurchaseStatus.error) {
         for (var listener in _listeners) {
-          listener.onPurchaseError(PurchaseInfo.of(purchase));
+          listener.onPurchaseError(purchase);
         }
       } else if ([PurchaseStatus.purchased, PurchaseStatus.restored]
           .contains(purchase.status)) {
@@ -90,29 +92,29 @@ abstract class PurchaseService {
           switch (verification) {
             case VerificationStatus.SUCCESS:
               for (var listener in _listeners) {
-                listener.onPurchaseSuccess(PurchaseInfo.of(purchase));
+                listener.onPurchaseSuccess(purchase);
               }
               return;
             case VerificationStatus.ERROR:
               for (var listener in _listeners) {
-                listener.onPurchaseError(PurchaseInfo.of(purchase));
+                listener.onPurchaseError(purchase);
               }
               return;
             case VerificationStatus.ALREADY_USED:
               for (var listener in _listeners) {
-                listener.onPurchaseAlreadyUsed(PurchaseInfo.of(purchase));
+                listener.onPurchaseAlreadyUsed(purchase);
               }
               return;
           }
         } else {
           for (var listener in _listeners) {
-            listener.onPurchaseError(PurchaseInfo.of(purchase));
+            listener.onPurchaseError(purchase);
           }
         }
       }
     } catch (err) {
       for (var listener in _listeners) {
-        listener.onPurchaseError(PurchaseInfo.of(purchase));
+        listener.onPurchaseError(purchase);
       }
     }
   }
