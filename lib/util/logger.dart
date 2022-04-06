@@ -51,35 +51,28 @@ class Logger {
     required String message,
     StackTrace? stack,
   }) async {
-    Map<String, String?> object = {
-      "severity": severity,
-      "module": '$module',
-      "message": message,
-    };
-
-    object["severity"] = severity;
-
-    if (module != null) {
-      object["module"] = module.toString();
-    }
-
-    object["message"] = message;
+    Map<String, String?> object = {"severity": severity, "message": message};
 
     if (stack != null) {
       object["stack"] = stack.toString();
     }
 
-    String pretty = JsonEncoder.withIndent(' ').convert(object);
+    JsonEncoder pretty = JsonEncoder.withIndent(' ');
 
     if (kDebugMode) {
-      log(pretty);
+      log(pretty.convert(object), name: '${module ?? 'logger'}');
     } else if (!kIsWeb && checkReportsAccepted()) {
       String? uid = await retrieveUserId?.call();
+
       if (uid != null) {
         FirebaseCrashlytics.instance.setUserIdentifier(uid);
       }
 
-      FirebaseCrashlytics.instance.log(pretty);
+      if (module != null) {
+        object["module"] = module.toString();
+      }
+
+      FirebaseCrashlytics.instance.log(pretty.convert(object));
     }
   }
 }
