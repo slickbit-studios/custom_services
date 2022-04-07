@@ -1,3 +1,4 @@
+import 'package:custom_services/services/purchases/exception.dart';
 import 'package:custom_services/services/purchases/product.dart';
 
 import 'service.dart';
@@ -9,21 +10,24 @@ class WebPurchaseService extends PurchaseService {
 
   @override
   ProductDetails getDetails(Product product) {
-    throw UnimplementedError('Web purchases not implemented yet'); // TODO
+    throw PurchaseException.notFound(product.id);
+    // TODO: implement
   }
 
   @override
   Future<void> restore() async {
-    throw UnimplementedError('Web purchases not implemented yet'); // TODO
+    // TODO: implement
   }
 
   @override
   Future<bool> openBuyDialog(Product product) {
-    throw UnimplementedError('Web purchases not implemented yet'); // TODO
+    throw UnimplementedError('Web purchases not implemented yet');
+    // TODO: implement
   }
 
   @override
   Future<VerificationStatus> verifyPurchase(PurchaseDetails purchase) {
-    throw UnimplementedError('Web purchases not implemented yet'); // TODO
+    throw UnimplementedError('Web purchases not implemented yet');
+    // TODO: implement
   }
 }
