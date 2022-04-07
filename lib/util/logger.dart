@@ -57,7 +57,7 @@ class Logger {
       object["stack"] = stack.toString();
     }
 
-    JsonEncoder pretty = JsonEncoder.withIndent(' ');
+    JsonEncoder formatter = JsonEncoder.withIndent(' ');
 
     if (kDebugMode) {
       log(pretty.convert(object), name: '${module ?? 'logger'}');
@@ -72,7 +72,7 @@ class Logger {
         object["module"] = module.toString();
       }
 
-      FirebaseCrashlytics.instance.log(pretty.convert(object));
+      FirebaseCrashlytics.instance.log(formatter.convert(object));
     }
   }
 }
