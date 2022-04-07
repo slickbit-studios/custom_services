@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -60,7 +61,19 @@ class Logger {
     JsonEncoder formatter = JsonEncoder.withIndent(' ');
 
     if (kDebugMode) {
-      log(pretty.convert(object), name: '${module ?? 'logger'}');
+      String pretty = formatter.convert(object);
+
+      if (kIsWeb) {
+        // web truncates messages, so split message
+        while (pretty.isNotEmpty) {
+          String part = pretty.substring(0, math.min(pretty.length, 80));
+          log(part, name: '${module ?? ''}');
+
+          pretty = pretty.substring(part.length);
+        }
+      } else {
+        log(formatter.convert(object), name: '${module ?? ''}');
+      }
     } else if (!kIsWeb && checkReportsAccepted()) {
       String? uid = await retrieveUserId?.call();
 
