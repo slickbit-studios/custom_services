@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:custom_services/services/purchases/exception.dart';
 import 'package:custom_services/services/purchases/product.dart';
+import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:in_app_purchase_ios/store_kit_wrappers.dart';
+import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
 
 import 'service.dart';
 
@@ -28,10 +34,18 @@ abstract class NativePurchaseService extends PurchaseService {
   }
 
   @override
-  Future<bool> openBuyDialog(Product product) {
+  Future<bool> openBuyDialog(Product product) async {
     ProductDetails details = getDetails(product);
     _purchase.getPlatformAddition();
     final PurchaseParam param = PurchaseParam(productDetails: details);
+
+    if (Platform.isIOS) {
+      var paymentWrapper = SKPaymentQueueWrapper();
+      var transactions = await paymentWrapper.transactions();
+      for (var transaction in transactions) {
+        await paymentWrapper.finishTransaction(transaction);
+      }
+    }
 
     if (product.type == ProductType.consumable) {
       return _purchase.buyConsumable(purchaseParam: param);
@@ -77,6 +91,16 @@ abstract class NativePurchaseService extends PurchaseService {
             .contains(verification)) {
           if (purchase.pendingCompletePurchase) {
             await InAppPurchase.instance.completePurchase(purchase);
+          } else {
+            // consume on android
+            final BillingResultWrapper billingResult =
+                await (InAppPurchasePlatformAddition.instance!
+                        as InAppPurchaseAndroidPlatformAddition)
+                    .consumePurchase(purchase);
+
+            if (billingResult.responseCode != BillingResponse.ok) {
+              throw 'Failed to consume purchase';
+            }
           }
 
           switch (verification) {
