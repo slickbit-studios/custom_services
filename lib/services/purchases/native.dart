@@ -6,8 +6,8 @@ import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:in_app_purchase_ios/store_kit_wrappers.dart';
 import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
+import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 
 import 'service.dart';
 
