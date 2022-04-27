@@ -58,7 +58,7 @@ class Logger {
       object["stack"] = stack.toString();
     }
 
-    JsonEncoder formatter = JsonEncoder.withIndent(' ');
+    JsonEncoder formatter = const JsonEncoder.withIndent(' ');
 
     if (kDebugMode) {
       String pretty = formatter.convert(object);

@@ -1,5 +1,6 @@
-import 'package:custom_services/services/purchases/exception.dart';
 import 'package:custom_services/services/purchases/product.dart';
+import 'package:custom_services/services/purchases/purchase.dart';
+import 'package:flutter/widgets.dart';
 
 import 'service.dart';
 
@@ -9,17 +10,16 @@ class PurchaseServiceDummy extends PurchaseService {
   }
 
   @override
-  ProductDetails getDetails(Product product) {
-    throw PurchaseException.notFound(product.id);
-  }
-
-  @override
   Future<void> restore() async {}
 
   @override
-  Future<bool> openBuyDialog(Product product) async => false;
+  Future<bool> openCheckout(BuildContext context, Product product) async =>
+      false;
 
   @override
-  Future<VerificationStatus> verifyPurchase(PurchaseDetails purchase) async =>
+  Future<VerificationStatus> verifyPurchase(PurchaseInfo purchase) async =>
       VerificationStatus.ERROR;
+
+  @override
+  bool canBuy(Product product) => false;
 }

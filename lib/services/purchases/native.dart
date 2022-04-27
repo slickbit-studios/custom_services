@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:custom_services/services/purchases/exception.dart';
 import 'package:custom_services/services/purchases/product.dart';
+import 'package:custom_services/services/purchases/purchase.dart';
+import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_ios/store_kit_wrappers.dart';
@@ -34,9 +36,8 @@ abstract class NativePurchaseService extends PurchaseService {
   }
 
   @override
-  Future<bool> openBuyDialog(Product product) async {
+  Future<bool> openCheckout(BuildContext context, Product product) async {
     ProductDetails details = getDetails(product);
-    _purchase.getPlatformAddition();
     final PurchaseParam param = PurchaseParam(productDetails: details);
 
     if (Platform.isIOS) {
@@ -54,7 +55,6 @@ abstract class NativePurchaseService extends PurchaseService {
     }
   }
 
-  @override
   ProductDetails getDetails(Product product) {
     try {
       return _details.firstWhere((element) => element.id == product.id);
@@ -73,24 +73,26 @@ abstract class NativePurchaseService extends PurchaseService {
     try {
       if (purchase.status == PurchaseStatus.pending) {
         for (var listener in listeners) {
-          listener.onPurchaseStarted(purchase);
+          listener.onPurchaseStarted(PurchaseInfo.from(purchase));
         }
       } else if (purchase.status == PurchaseStatus.canceled) {
         for (var listener in listeners) {
-          listener.onPurchaseCanceled(purchase);
+          listener.onPurchaseCanceled(PurchaseInfo.from(purchase));
         }
       } else if (purchase.status == PurchaseStatus.error) {
         for (var listener in listeners) {
-          listener.onPurchaseError(purchase);
+          listener.onPurchaseError(PurchaseInfo.from(purchase));
         }
       } else if ([PurchaseStatus.purchased, PurchaseStatus.restored]
           .contains(purchase.status)) {
-        VerificationStatus verification = await verifyPurchase(purchase);
+        VerificationStatus verification = await verifyPurchase(
+          PurchaseInfo.from(purchase),
+        );
 
         if ([VerificationStatus.SUCCESS, VerificationStatus.ALREADY_USED]
             .contains(verification)) {
           if (purchase.pendingCompletePurchase) {
-            await InAppPurchase.instance.completePurchase(purchase);
+            await _purchase.completePurchase(purchase);
           } else {
             // consume on android
             final BillingResultWrapper billingResult =
@@ -106,29 +108,29 @@ abstract class NativePurchaseService extends PurchaseService {
           switch (verification) {
             case VerificationStatus.SUCCESS:
               for (var listener in listeners) {
-                listener.onPurchaseSuccess(purchase);
+                listener.onPurchaseSuccess(PurchaseInfo.from(purchase));
               }
               return;
             case VerificationStatus.ERROR:
               for (var listener in listeners) {
-                listener.onPurchaseError(purchase);
+                listener.onPurchaseError(PurchaseInfo.from(purchase));
               }
               return;
             case VerificationStatus.ALREADY_USED:
               for (var listener in listeners) {
-                listener.onPurchaseAlreadyUsed(purchase);
+                listener.onPurchaseAlreadyUsed(PurchaseInfo.from(purchase));
               }
               return;
           }
         } else {
           for (var listener in listeners) {
-            listener.onPurchaseError(purchase);
+            listener.onPurchaseError(PurchaseInfo.from(purchase));
           }
         }
       }
     } catch (err) {
       for (var listener in listeners) {
-        listener.onPurchaseError(purchase);
+        listener.onPurchaseError(PurchaseInfo.from(purchase));
       }
     }
   }

@@ -1,9 +1,9 @@
-import 'package:custom_services/services/purchases/service.dart';
+import 'package:custom_services/services/purchases/purchase.dart';
 
 class PurchaseHandler {
-  void onPurchaseStarted(PurchaseDetails purchase) {}
-  void onPurchaseCanceled(PurchaseDetails purchase) {}
-  void onPurchaseSuccess(PurchaseDetails purchase) {}
-  void onPurchaseError(PurchaseDetails purchase) {}
-  void onPurchaseAlreadyUsed(PurchaseDetails purchase) {}
+  void onPurchaseStarted(PurchaseInfo purchase) {}
+  void onPurchaseCanceled(PurchaseInfo purchase) {}
+  void onPurchaseSuccess(PurchaseInfo purchase) {}
+  void onPurchaseError(PurchaseInfo purchase) {}
+  void onPurchaseAlreadyUsed(PurchaseInfo purchase) {}
 }

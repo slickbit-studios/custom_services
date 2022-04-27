@@ -1,6 +1,7 @@
 import 'package:custom_services/services/purchases/handler.dart';
 import 'package:custom_services/services/purchases/product.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:custom_services/services/purchases/purchase.dart';
+import 'package:flutter/widgets.dart';
 
 export 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -21,13 +22,13 @@ abstract class PurchaseService {
     _listeners.remove(listener);
   }
 
-  ProductDetails getDetails(Product product);
+  bool canBuy(Product product);
 
   Future<void> restore();
 
-  Future<bool> openBuyDialog(Product product);
+  Future<bool> openCheckout(BuildContext context, Product product);
 
   /// To be defined in subclass. This method must verify the purchase via
   /// backend and return a bool value that represents if the purchase is valid
-  Future<VerificationStatus> verifyPurchase(PurchaseDetails purchase);
+  Future<VerificationStatus> verifyPurchase(PurchaseInfo purchase);
 }

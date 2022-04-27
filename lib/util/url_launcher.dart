@@ -5,12 +5,12 @@ import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'logger.dart';
 
 class UrlLauncher {
-  static void launch(String url) async {
+  static Future<void> launch(String url) async {
     try {
       Logger logger = Logger.instance;
 
       try {
-        await launcher.launch(url);
+        await launcher.launchUrl(Uri(scheme: url));
         logger.info(module: UrlLauncher, message: 'URL $url launched');
       } catch (err) {
         logger.error(

@@ -3,7 +3,11 @@ include: package:flutter_lints/flutter.yaml
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
 
+analyzer:
+  exclude:
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+
 linter:
   rules:
     constant_identifier_names: false
-    prefer_const_constructors: false
