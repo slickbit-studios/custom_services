@@ -9,6 +9,10 @@ class Session with _$Session {
 
   const factory Session({
     required String id,
+    // ignore: invalid_annotation_target
+    @JsonKey(name: 'success_url') required String successUrl,
+    // ignore: invalid_annotation_target
+    @JsonKey(name: 'cancel_url') required String cancelUrl,
   }) = _Session;
 
   factory Session.fromJson(Map<String, Object?> json) =>

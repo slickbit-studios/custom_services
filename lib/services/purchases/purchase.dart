@@ -14,6 +14,7 @@ class PurchaseInfo with _$PurchaseInfo {
     @Default('undefined') String provider,
     String? token,
     PurchaseStatus? status,
+    String? baseUrl, // required for stripe only
   }) = _PurchaseInfo;
 
   static PurchaseInfo from(PurchaseDetails details) {

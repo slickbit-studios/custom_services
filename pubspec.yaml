@@ -21,7 +21,7 @@ dependencies:
   stripe_checkout: ^0.1.2
   url_launcher: ^6.1.0
   universal_html: ^2.0.8
-  json_annotation: ^4.4.0
+  json_annotation: ^4.5.0
 
 dev_dependencies:
   flutter_test:

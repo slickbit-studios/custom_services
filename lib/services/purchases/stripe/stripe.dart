@@ -1,7 +1,6 @@
 import 'package:custom_services/services/purchases/product.dart';
 import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:custom_services/services/purchases/stripe/session.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stripe_checkout/stripe_checkout.dart';
 
@@ -26,17 +25,13 @@ abstract class StripePurchaseService extends PurchaseService {
 
     var session = await createSession(product.id);
 
-    var response = await redirectToCheckout(
+    await redirectToCheckout(
       context: context,
       sessionId: session.id,
       publishableKey: publishableKey,
-      successUrl: kIsWeb ? Uri.base.toString() : null,
-      canceledUrl: kIsWeb ? Uri.base.toString() : null,
+      successUrl: session.successUrl,
+      canceledUrl: session.cancelUrl,
     );
-
-    if (response != null) {
-      // TODO check
-    }
 
     return false;
   }
@@ -64,13 +59,13 @@ abstract class StripePurchaseService extends PurchaseService {
                 listener.onPurchaseSuccess(purchase);
               }
               return;
-            case VerificationStatus.ERROR:
-              throw 'Error on Purchase';
             case VerificationStatus.ALREADY_USED:
               for (var listener in listeners) {
                 listener.onPurchaseAlreadyUsed(purchase);
               }
               return;
+            default:
+              throw 'Error on Purchase';
           }
         } else {
           throw 'Error on Purchase';
