@@ -20,6 +20,8 @@ class PurchaseInfo with _$PurchaseInfo {
   static PurchaseInfo from(PurchaseDetails details) {
     return PurchaseInfo(
       productId: details.productID,
+      token: details.verificationData.serverVerificationData,
+      provider: details.verificationData.source,
       status: details.status,
     );
   }
