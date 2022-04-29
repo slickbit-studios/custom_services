@@ -13,7 +13,7 @@ dependencies:
 
   http: ^0.13.4
   firebase_core: ^1.15.0
-  firebase_crashlytics: ^2.6.3
+  firebase_crashlytics: ^2.7.0
   in_app_purchase: ^3.0.2
   in_app_purchase_android: ^0.2.2+2
   in_app_purchase_storekit: ^0.3.0+4
@@ -30,7 +30,7 @@ dev_dependencies:
   freezed: ^1.1.1
   freezed_annotation: ^1.1.0
   build_runner: ^2.1.10
-  json_serializable: ^6.1.6
+  json_serializable: ^6.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
