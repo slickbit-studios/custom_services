@@ -10,7 +10,7 @@ class UrlLauncher {
       Logger logger = Logger.instance;
 
       try {
-        await launcher.launchUrl(Uri(scheme: url));
+        await launcher.launchUrl(Uri.parse(url));
         logger.info(module: UrlLauncher, message: 'URL $url launched');
       } catch (err) {
         logger.error(
