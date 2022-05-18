@@ -246,14 +246,14 @@ packages:
       name: freezed
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "2.0.3+1"
   freezed_annotation:
     dependency: "direct dev"
     description:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.3"
   frontend_server_client:
     dependency: transitive
     description:
@@ -517,7 +517,7 @@ packages:
       name: stripe_checkout
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2"
+    version: "1.0.0"
   term_glyph:
     dependency: transitive
     description:
@@ -643,7 +643,7 @@ packages:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.4"
   webview_flutter_android:
     dependency: transitive
     description:
