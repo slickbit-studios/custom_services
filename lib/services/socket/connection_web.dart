@@ -76,7 +76,7 @@ class WebSocketConnection extends SocketConnection {
     Duration? timeout,
   }) async {
     // if already connected, just perform the connectedCallback
-    if (_state == BackendState.STATE_CONNECTED) {
+    if (_state != BackendState.STATE_DISCONNECTED) {
       Logger.instance.info(
         module: runtimeType,
         message: 'No new connection was established, because STATE_CONNECTED',
