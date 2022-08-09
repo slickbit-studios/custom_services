@@ -33,7 +33,10 @@ class AdService {
         }
       },
       (FormError error) {
-        // Handle the error
+        Logger.instance.error(
+          module: runtimeType,
+          message: 'Error loading consent form${error.message}',
+        );
       },
     );
   }
@@ -48,6 +51,7 @@ class AdService {
       },
       (FormError formError) {
         Logger.instance.error(
+          module: runtimeType,
           message: 'Failed to load ad consent form: ${formError.message}',
         );
       },
@@ -66,9 +70,14 @@ class AdService {
       listener: BannerAdListener(
         onAdLoaded: (ad) => _bannerAd = ad,
         onAdClosed: (ad) => _bannerAd = null,
-        onAdClicked: (ad) => logger.warning(message: 'Banner ad tapped'),
-        onAdFailedToLoad: (ad, error) =>
-            logger.warning(message: 'Ad failed to load ${error.message}'),
+        onAdClicked: (ad) => logger.warning(
+          module: runtimeType,
+          message: 'Banner ad tapped',
+        ),
+        onAdFailedToLoad: (ad, error) => logger.warning(
+          module: runtimeType,
+          message: 'Ad failed to load ${error.message}',
+        ),
       ),
     );
 
@@ -106,11 +115,16 @@ class AdService {
           _interstitialAd?.fullScreenContentCallback =
               FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) => _bannerAd = null,
-            onAdClicked: (ad) => logger.warning(message: 'Banner ad tapped'),
+            onAdClicked: (ad) => logger.warning(
+              module: runtimeType,
+              message: 'Banner ad tapped',
+            ),
           );
         },
-        onAdFailedToLoad: (error) =>
-            logger.warning(message: 'Ad failed to load ${error.message}'),
+        onAdFailedToLoad: (error) => logger.warning(
+          module: runtimeType,
+          message: 'Ad failed to load ${error.message}',
+        ),
       ),
     );
   }
