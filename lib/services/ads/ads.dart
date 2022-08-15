@@ -129,7 +129,7 @@ class AdService {
     );
   }
 
-  Ad? getInterstitialAd() {
+  InterstitialAd? getInterstitialAd() {
     int now = DateTime.now().millisecondsSinceEpoch;
 
     if (_interstitialAd != null &&

@@ -26,7 +26,7 @@ class RestHandler {
 
       if (res.statusCode >= 400) {
         throw RestException(
-          'Error performing GET ' + uri.toString(),
+          'Error performing GET $uri',
           response: res,
         );
       }
@@ -56,7 +56,7 @@ class RestHandler {
 
       if (res.statusCode >= 400) {
         throw RestException(
-          'Error performing POST ' + uri.toString(),
+          'Error performing POST $uri',
           response: res,
         );
       }
@@ -86,7 +86,7 @@ class RestHandler {
 
       if (res.statusCode >= 400) {
         throw RestException(
-          'Error performing PUT ' + uri.toString(),
+          'Error performing PUT $uri',
           response: res,
         );
       }
@@ -116,7 +116,7 @@ class RestHandler {
 
       if (res.statusCode >= 400) {
         throw RestException(
-          'Error performing PUT ' + uri.toString(),
+          'Error performing PUT $uri',
           response: res,
         );
       }
@@ -145,7 +145,7 @@ class RestHandler {
 
     if (res.statusCode >= 400) {
       throw RestException(
-        'Error performing PATCH ' + uri.toString(),
+        'Error performing PATCH $uri',
         response: res,
       );
     }
