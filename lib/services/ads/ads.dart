@@ -11,6 +11,9 @@ class AdService {
   int? _lastInterstitial;
   int? _lastBanner;
 
+  bool _bannerLoading = false;
+  bool _interstitialLoading = false;
+
   InterstitialAd? _interstitialAd;
   Ad? _bannerAd;
 
@@ -63,21 +66,29 @@ class AdService {
 
     var logger = Logger.instance;
 
+    _bannerLoading = true;
+
     var bannerAd = BannerAd(
       adUnitId: bannerAdId!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
-        onAdLoaded: (ad) => _bannerAd = ad,
+        onAdLoaded: (ad) {
+          _bannerAd = ad;
+          _bannerLoading = false;
+        },
         onAdClosed: (ad) => _bannerAd = null,
         onAdClicked: (ad) => logger.warning(
           module: runtimeType,
           message: 'Banner ad tapped',
         ),
-        onAdFailedToLoad: (ad, error) => logger.warning(
-          module: runtimeType,
-          message: 'Ad failed to load ${error.message}',
-        ),
+        onAdFailedToLoad: (ad, error) {
+          _bannerLoading = false;
+          logger.warning(
+            module: runtimeType,
+            message: 'Ad failed to load ${error.message}',
+          );
+        },
       ),
     );
 
@@ -87,12 +98,17 @@ class AdService {
   Ad? getBannerAd() {
     int now = DateTime.now().millisecondsSinceEpoch;
 
-    if (_bannerAd == null) {
+    // ensure initial frequency delay
+    _lastBanner ??= now;
+
+    // load if banner is currently null
+    if (_bannerAd == null && !_bannerLoading) {
       loadBannerAd();
       return null;
     }
 
-    if (_lastBanner != null && _lastBanner! + bannerFrequency * 1000 > now) {
+    // check if next banner can be shown
+    if (_lastBanner! + bannerFrequency * 1000 > now) {
       return null;
     }
 
@@ -110,13 +126,16 @@ class AdService {
     );
 
     var logger = Logger.instance;
+    _interstitialLoading = true;
 
     InterstitialAd.load(
       adUnitId: interstitialAdId!,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
+          _interstitialLoading = false;
           _interstitialAd = ad;
+
           _interstitialAd?.fullScreenContentCallback =
               FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) => _bannerAd = null,
@@ -126,10 +145,13 @@ class AdService {
             ),
           );
         },
-        onAdFailedToLoad: (error) => logger.warning(
-          module: runtimeType,
-          message: 'Ad failed to load ${error.message}',
-        ),
+        onAdFailedToLoad: (error) {
+          _interstitialLoading = false;
+          logger.warning(
+            module: runtimeType,
+            message: 'Ad failed to load ${error.message}',
+          );
+        },
       ),
     );
   }
@@ -137,13 +159,17 @@ class AdService {
   InterstitialAd? getInterstitialAd() {
     int now = DateTime.now().millisecondsSinceEpoch;
 
-    if (_interstitialAd == null) {
+    // ensure initial frequency delay
+    _lastInterstitial ??= now;
+
+    // load if interstitial is currently null
+    if (_interstitialAd == null && !_interstitialLoading) {
       loadInterstitialAd();
       return null;
     }
 
-    if (_lastInterstitial != null &&
-        _lastInterstitial! + interstitialFrequency * 1000 > now) {
+    // check if next interstitial can be shown
+    if (_lastInterstitial! + interstitialFrequency * 1000 > now) {
       return null;
     }
 
