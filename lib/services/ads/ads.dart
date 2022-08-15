@@ -187,24 +187,30 @@ class AdService {
 
 class IosTestAdService extends AdService {
   IosTestAdService({
-    int interstitialFrequency = 3000,
+    bool banners = true,
     int bannerFrequency = 3000,
+    bool interstitials = true,
+    int interstitialFrequency = 3000,
   }) : super(
-          bannerAdId: 'ca-app-pub-3940256099942544/2934735716',
+          bannerAdId: banners ? 'ca-app-pub-3940256099942544/2934735716' : null,
           bannerFrequency: bannerFrequency,
-          interstitialAdId: 'ca-app-pub-3940256099942544/4411468910',
+          interstitialAdId:
+              interstitials ? 'ca-app-pub-3940256099942544/4411468910' : null,
           interstitialFrequency: interstitialFrequency,
         );
 }
 
 class AndroidTestAdService extends AdService {
   AndroidTestAdService({
-    int interstitialFrequency = 3000,
+    bool banners = true,
     int bannerFrequency = 3000,
+    bool interstitials = true,
+    int interstitialFrequency = 3000,
   }) : super(
-          bannerAdId: 'ca-app-pub-3940256099942544/6300978111',
+          bannerAdId: banners ? 'ca-app-pub-3940256099942544/6300978111' : null,
           bannerFrequency: bannerFrequency,
-          interstitialAdId: 'ca-app-pub-3940256099942544/1033173712',
+          interstitialAdId:
+              interstitials ? 'ca-app-pub-3940256099942544/1033173712' : null,
           interstitialFrequency: interstitialFrequency,
         );
 }
