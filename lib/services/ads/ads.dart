@@ -87,6 +87,11 @@ class AdService {
   Ad? getBannerAd() {
     int now = DateTime.now().millisecondsSinceEpoch;
 
+    if (_bannerAd == null) {
+      loadBannerAd();
+      return null;
+    }
+
     if (_lastBanner != null && _lastBanner! + bannerFrequency > now) {
       return null;
     }
@@ -132,6 +137,11 @@ class AdService {
   InterstitialAd? getInterstitialAd() {
     int now = DateTime.now().millisecondsSinceEpoch;
 
+    if (_interstitialAd == null) {
+      loadInterstitialAd();
+      return null;
+    }
+
     if (_interstitialAd != null &&
         _lastInterstitial! + interstitialFrequency > now) {
       return null;
@@ -146,17 +156,25 @@ class AdService {
 }
 
 class IosTestAdService extends AdService {
-  IosTestAdService()
-      : super(
+  IosTestAdService({
+    int interstitialFrequency = 3000,
+    int bannerFrequency = 3000,
+  }) : super(
           bannerAdId: 'ca-app-pub-3940256099942544/2934735716',
+          bannerFrequency: bannerFrequency,
           interstitialAdId: 'ca-app-pub-3940256099942544/4411468910',
+          interstitialFrequency: interstitialFrequency,
         );
 }
 
 class AndroidTestAdService extends AdService {
-  AndroidTestAdService()
-      : super(
+  AndroidTestAdService({
+    int interstitialFrequency = 3000,
+    int bannerFrequency = 3000,
+  }) : super(
           bannerAdId: 'ca-app-pub-3940256099942544/6300978111',
+          bannerFrequency: bannerFrequency,
           interstitialAdId: 'ca-app-pub-3940256099942544/1033173712',
+          interstitialFrequency: interstitialFrequency,
         );
 }
