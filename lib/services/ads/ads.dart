@@ -92,7 +92,7 @@ class AdService {
       return null;
     }
 
-    if (_lastBanner != null && _lastBanner! + bannerFrequency > now) {
+    if (_lastBanner != null && _lastBanner! + bannerFrequency * 1000 > now) {
       return null;
     }
 
@@ -142,8 +142,8 @@ class AdService {
       return null;
     }
 
-    if (_interstitialAd != null &&
-        _lastInterstitial! + interstitialFrequency > now) {
+    if (_lastInterstitial != null &&
+        _lastInterstitial! + interstitialFrequency * 1000 > now) {
       return null;
     }
 
