@@ -12,7 +12,7 @@ class BannerAdView extends StatefulWidget {
 }
 
 class _BannerAdViewState extends State<BannerAdView> {
-  AdWithView? _ad;
+  BannerAd? _ad;
 
   @override
   void initState() {
@@ -30,6 +30,11 @@ class _BannerAdViewState extends State<BannerAdView> {
   Widget build(BuildContext context) {
     if (_ad == null) return Container();
 
-    return AdWidget(ad: _ad!);
+    return Container(
+      width: _ad?.size.width.toDouble(),
+      height: _ad?.size.height.toDouble(),
+      alignment: Alignment.topCenter,
+      child: AdWidget(ad: _ad!),
+    );
   }
 }

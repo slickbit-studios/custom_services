@@ -15,7 +15,7 @@ class AdService {
   bool _interstitialLoading = false;
 
   InterstitialAd? _interstitialAd;
-  AdWithView? _bannerAd;
+  BannerAd? _bannerAd;
 
   AdService({
     this.interstitialAdId,
@@ -74,7 +74,7 @@ class AdService {
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          _bannerAd = ad as AdWithView;
+          _bannerAd = ad as BannerAd;
           _bannerLoading = false;
         },
         onAdClosed: (ad) => _bannerAd = null,
@@ -95,7 +95,7 @@ class AdService {
     bannerAd.load();
   }
 
-  AdWithView? getBannerAd() {
+  BannerAd? getBannerAd() {
     if (bannerAdId == null) return null;
 
     int now = DateTime.now().millisecondsSinceEpoch;
