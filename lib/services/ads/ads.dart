@@ -61,7 +61,7 @@ class AdService {
     );
   }
 
-  void loadBannerAd({AdSize size = AdSize.banner}) {
+  void loadBannerAd({AdSize size = AdSize.fluid}) {
     assert(bannerAdId != null, 'Requested banner ad but no ad id is set');
 
     var logger = Logger.instance;

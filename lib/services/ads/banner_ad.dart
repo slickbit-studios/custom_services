@@ -30,11 +30,21 @@ class _BannerAdViewState extends State<BannerAdView> {
   Widget build(BuildContext context) {
     if (_ad == null) return Container();
 
-    return Container(
-      width: _ad?.size.width.toDouble(),
-      height: _ad?.size.height.toDouble(),
-      alignment: Alignment.topCenter,
-      child: AdWidget(ad: _ad!),
-    );
+    if (_ad?.size is FluidAdSize) {
+      return LayoutBuilder(
+        builder: (context, constraints) => Container(
+          width: constraints.maxWidth,
+          alignment: Alignment.topCenter,
+          child: AdWidget(ad: _ad!),
+        ),
+      );
+    } else {
+      return Container(
+        width: _ad?.size.width.toDouble(),
+        height: _ad?.size.height.toDouble(),
+        alignment: Alignment.topCenter,
+        child: AdWidget(ad: _ad!),
+      );
+    }
   }
 }
