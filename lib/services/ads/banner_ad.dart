@@ -13,15 +13,35 @@ class BannerAdView extends StatefulWidget {
 
 class _BannerAdViewState extends State<BannerAdView> {
   BannerAd? _ad;
+  double _width = 0;
+  double _height = 10;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       var ad = widget.service.getBannerAd();
+
       if (ad != null) {
-        setState(() => _ad = ad);
+        double width;
+        double height;
+
+        if (ad.size is FluidAdSize) {
+          // load actual ad size
+          var sizes = await ad.getPlatformAdSize();
+          width = sizes!.width.toDouble();
+          height = sizes.height.toDouble();
+        } else {
+          width = ad.size.width.toDouble();
+          height = ad.size.height.toDouble();
+        }
+
+        setState(() {
+          _ad = ad;
+          _width = width;
+          _height = height;
+        });
       }
     });
   }
@@ -30,21 +50,10 @@ class _BannerAdViewState extends State<BannerAdView> {
   Widget build(BuildContext context) {
     if (_ad == null) return Container();
 
-    if (_ad?.size is FluidAdSize) {
-      return LayoutBuilder(
-        builder: (context, constraints) => Container(
-          width: constraints.maxWidth,
-          alignment: Alignment.topCenter,
-          child: AdWidget(ad: _ad!),
-        ),
-      );
-    } else {
-      return Container(
-        width: _ad?.size.width.toDouble(),
-        height: _ad?.size.height.toDouble(),
-        alignment: Alignment.topCenter,
-        child: AdWidget(ad: _ad!),
-      );
-    }
+    return Container(
+      width: _width,
+      height: _height,
+      child: AdWidget(ad: _ad!),
+    );
   }
 }
