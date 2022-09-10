@@ -14,6 +14,24 @@ class RestHandler {
 
   RestHandler(this.url);
 
+  static Future<Uri?> detectRedirectTarget(Uri uri) async {
+    try {
+      http.Client client = http.Client();
+
+      var req = http.Request('GET', uri);
+      req.followRedirects = false;
+
+      var res = await client.send(req);
+      if (res.isRedirect) {
+        if (res.headers['location'] != null) {
+          return Uri.parse(res.headers['location']!);
+        }
+      }
+    } catch (_) {/* ignore*/}
+
+    return null;
+  }
+
   Future<http.Response> get({
     String extension = '/',
     Map<String, String>? headers,
@@ -21,6 +39,8 @@ class RestHandler {
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
+      uri = await detectRedirectTarget(uri) ?? uri;
+
       http.Response res =
           await http.get(uri, headers: headers).timeout(timeout);
 
@@ -45,6 +65,7 @@ class RestHandler {
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
+      uri = await detectRedirectTarget(uri) ?? uri;
 
       http.Response res = await http
           .post(
@@ -75,6 +96,7 @@ class RestHandler {
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
+      uri = await detectRedirectTarget(uri) ?? uri;
 
       http.Response res = await http
           .put(
@@ -105,6 +127,7 @@ class RestHandler {
   }) async {
     try {
       Uri uri = Uri.parse(url + extension);
+      uri = await detectRedirectTarget(uri) ?? uri;
 
       http.Response res = await http
           .delete(
@@ -133,23 +156,28 @@ class RestHandler {
     Duration timeout = DEFAULT_TIMEOUT,
     Object body = const {},
   }) async {
-    Uri uri = Uri.parse(url + extension);
+    try {
+      Uri uri = Uri.parse(url + extension);
+      uri = await detectRedirectTarget(uri) ?? uri;
 
-    http.Response res = await http
-        .patch(
-          uri,
-          headers: headers,
-          body: jsonEncode(body),
-        )
-        .timeout(timeout);
+      http.Response res = await http
+          .patch(
+            uri,
+            headers: headers,
+            body: jsonEncode(body),
+          )
+          .timeout(timeout);
 
-    if (res.statusCode >= 400) {
-      throw RestException(
-        'Error performing PATCH $uri',
-        response: res,
-      );
+      if (res.statusCode >= 400) {
+        throw RestException(
+          'Error performing PATCH $uri',
+          response: res,
+        );
+      }
+
+      return res;
+    } on TimeoutException catch (_) {
+      throw RestException('Request timed out', timeout: true);
     }
-
-    return res;
   }
 }

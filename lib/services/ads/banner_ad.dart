@@ -48,9 +48,9 @@ class _BannerAdViewState extends State<BannerAdView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_ad == null) return Container();
+    if (_ad == null) return const SizedBox();
 
-    return Container(
+    return SizedBox(
       width: _width,
       height: _height,
       child: AdWidget(ad: _ad!),
