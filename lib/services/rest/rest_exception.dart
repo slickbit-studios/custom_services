@@ -18,5 +18,12 @@ class RestException implements Exception {
       (_timeout ? RESPONSE_CODE_TIMEOUT : RESPONSE_CODE_UNDEFINED);
 
   @override
-  String toString() => 'RestException: $_response';
+  String toString() {
+    String string = 'RestException: $text';
+    if (_response != null) {
+      string += ', response: {headers: ${_response?.headers},'
+          ' body: ${_response?.body}}';
+    }
+    return string;
+  }
 }

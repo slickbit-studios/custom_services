@@ -20,8 +20,8 @@ class AdService {
   AdService({
     this.interstitialAdId,
     this.bannerAdId,
-    this.interstitialFrequency = 3000,
-    this.bannerFrequency = 3000,
+    this.interstitialFrequency = 30,
+    this.bannerFrequency = 30,
   }) {
     MobileAds.instance.initialize();
   }
@@ -191,9 +191,9 @@ class IosTestAdService extends AdService {
 
   IosTestAdService({
     bool banners = true,
-    int bannerFrequency = 3000,
+    int bannerFrequency = 30,
     bool interstitials = true,
-    int interstitialFrequency = 3000,
+    int interstitialFrequency = 30,
   }) : super(
           bannerAdId: banners ? _banner : null,
           bannerFrequency: bannerFrequency,
@@ -208,9 +208,9 @@ class AndroidTestAdService extends AdService {
 
   AndroidTestAdService({
     bool banners = true,
-    int bannerFrequency = 3000,
+    int bannerFrequency = 30,
     bool interstitials = true,
-    int interstitialFrequency = 3000,
+    int interstitialFrequency = 30,
   }) : super(
           bannerAdId: banners ? _banner : null,
           bannerFrequency: bannerFrequency,
