@@ -18,7 +18,8 @@ class RestHandler {
     try {
       http.Client client = http.Client();
 
-      var req = http.Request('GET', uri);
+      var hostUri = Uri.parse(uri.origin);
+      var req = http.Request('GET', hostUri);
       req.followRedirects = false;
 
       var res = await client.send(req);
