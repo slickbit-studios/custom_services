@@ -14,23 +14,19 @@ class RestHandler {
 
   RestHandler(this.url);
 
-  static Future<Uri?> detectRedirectTarget(Uri uri) async {
+  static Future<String?> detectRedirectTarget(String url) async {
     try {
       http.Client client = http.Client();
 
-      var hostUri = Uri.parse(uri.origin);
+      var hostUri = Uri.parse(url);
       var req = http.Request('GET', hostUri);
       req.followRedirects = false;
 
       var res = await client.send(req);
       if (res.isRedirect) {
         var location = res.headers['location'];
-        if (location != null) {
-          var targetUri = Uri.parse(location);
-
-          if (targetUri.origin != uri.origin) {
-            return Uri.parse(res.headers['location']!);
-          }
+        if (location != url) {
+          return location;
         }
       }
     } catch (_) {/* ignore*/}
@@ -44,8 +40,8 @@ class RestHandler {
     Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
-      uri = await detectRedirectTarget(uri) ?? uri;
+      var targetUrl = await detectRedirectTarget(url) ?? url;
+      Uri uri = Uri.parse(targetUrl + extension);
 
       http.Response res =
           await http.get(uri, headers: headers).timeout(timeout);
@@ -70,8 +66,8 @@ class RestHandler {
     Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
-      uri = await detectRedirectTarget(uri) ?? uri;
+      var targetUrl = await detectRedirectTarget(url) ?? url;
+      Uri uri = Uri.parse(targetUrl + extension);
 
       http.Response res = await http
           .post(
@@ -101,8 +97,8 @@ class RestHandler {
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
-      uri = await detectRedirectTarget(uri) ?? uri;
+      var targetUrl = await detectRedirectTarget(url) ?? url;
+      Uri uri = Uri.parse(targetUrl + extension);
 
       http.Response res = await http
           .put(
@@ -132,8 +128,8 @@ class RestHandler {
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
-      uri = await detectRedirectTarget(uri) ?? uri;
+      var targetUrl = await detectRedirectTarget(url) ?? url;
+      Uri uri = Uri.parse(targetUrl + extension);
 
       http.Response res = await http
           .delete(
@@ -163,8 +159,8 @@ class RestHandler {
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
-      uri = await detectRedirectTarget(uri) ?? uri;
+      var targetUrl = await detectRedirectTarget(url) ?? url;
+      Uri uri = Uri.parse(targetUrl + extension);
 
       http.Response res = await http
           .patch(
