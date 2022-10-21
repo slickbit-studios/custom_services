@@ -12,8 +12,8 @@ dependencies:
     sdk: flutter
 
   http: ^0.13.5
-  firebase_core: ^1.24.0
-  firebase_crashlytics: ^2.9.0
+  firebase_core: ^2.1.0
+  firebase_crashlytics: ^3.0.2
   in_app_purchase: ^3.0.8
   in_app_purchase_android: ^0.2.3+5
   in_app_purchase_storekit: ^0.3.2+2
