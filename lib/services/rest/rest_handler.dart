@@ -24,8 +24,13 @@ class RestHandler {
 
       var res = await client.send(req);
       if (res.isRedirect) {
-        if (res.headers['location'] != null) {
-          return Uri.parse(res.headers['location']!);
+        var location = res.headers['location'];
+        if (location != null) {
+          var targetUri = Uri.parse(location);
+
+          if (targetUri.origin != uri.origin) {
+            return Uri.parse(res.headers['location']!);
+          }
         }
       }
     } catch (_) {/* ignore*/}
