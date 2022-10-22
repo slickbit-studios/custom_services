@@ -293,11 +293,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/google_mobile_ads"
-      ref: "356875362ddb2ac2e0056385d2729c093722fb8d"
-      resolved-ref: "356875362ddb2ac2e0056385d2729c093722fb8d"
-      url: "https://github.com/googleads/googleads-mobile-flutter"
+      ref: HEAD
+      resolved-ref: c1cc31f6fc8c8a043489421ebaa593edaa54500b
+      url: "https://github.com/jslattery26/googleads-mobile-flutter"
     source: git
-    version: "2.0.0"
+    version: "2.1.0"
   graphs:
     dependency: transitive
     description:
@@ -653,6 +653,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.3"
   watcher:
     dependency: transitive
     description:

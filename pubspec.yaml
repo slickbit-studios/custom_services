@@ -21,12 +21,12 @@ dependencies:
   in_app_purchase_storekit: ^0.3.2+2
   in_app_purchase_platform_interface: ^1.3.2
 
-  # temporary fix: https://github.com/googleads/googleads-mobile-flutter/issues/673
+  # temporary fix for ios build error:
+  # https://github.com/googleads/googleads-mobile-flutter/issues/673
   # google_mobile_ads: ^2.1.0
   google_mobile_ads:
     git:
-      url: https://github.com/googleads/googleads-mobile-flutter
-      ref: 356875362ddb2ac2e0056385d2729c093722fb8d
+      url: https://github.com/jslattery26/googleads-mobile-flutter
       path: packages/google_mobile_ads
 
   stripe_checkout: ^1.0.0
