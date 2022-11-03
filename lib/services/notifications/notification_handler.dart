@@ -19,7 +19,7 @@ class NotificationHandler {
   static Future<String?> getToken(String? key) =>
       FirebaseMessaging.instance.getToken(vapidKey: key);
 
-  static Future<bool> requestPermission(String? key) async =>
+  static Future<bool> requestPermission() async =>
       (await FirebaseMessaging.instance.requestPermission())
           .authorizationStatus ==
       AuthorizationStatus.authorized;
