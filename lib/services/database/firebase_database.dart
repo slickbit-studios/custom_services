@@ -7,7 +7,7 @@ class DatabaseNode {
 
   DatabaseNode._withQuery(DatabaseReference query) : _query = query;
 
-  Future<DatabaseNode> getChildNode(String key) async {
+  DatabaseNode getChildNode(String key) {
     var child = _query.child(key);
     return DatabaseNode._withQuery(child);
   }
