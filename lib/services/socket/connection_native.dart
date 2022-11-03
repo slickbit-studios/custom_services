@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:custom_services/services/crash_report/logger.dart';
 import 'package:custom_services/services/socket/connection.dart';
 import 'package:custom_services/services/socket/exceptions.dart';
-import 'package:custom_services/util/logger.dart';
 import 'package:flutter/foundation.dart';
 
 class NativeSocketConnection extends SocketConnection {

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
-import 'logger.dart';
+import '../services/crash_report/logger.dart';
 
 class UrlLauncher {
   static Future<void> launch(String url) async {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:custom_services/services/crash_report/logger.dart';
 import 'package:custom_services/services/socket/connection.dart';
 import 'package:custom_services/services/socket/exceptions.dart';
-import 'package:custom_services/util/logger.dart';
 import 'package:universal_html/html.dart';
 
 class WebSocketConnection extends SocketConnection {

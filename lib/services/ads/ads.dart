@@ -1,4 +1,4 @@
-import 'package:custom_services/util/logger.dart';
+import 'package:custom_services/services/crash_report/logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdService {

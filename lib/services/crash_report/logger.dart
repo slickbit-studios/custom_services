@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:custom_services/services/crash_report/exception.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -88,11 +89,10 @@ class Logger {
       FirebaseCrashlytics.instance.log(formatter.convert(object));
     }
   }
-}
 
-class LoggerException {
-  @override
-  String toString() {
-    return 'Logger has no instance because it has not been initialised';
-  }
+  static void Function(Object error, StackTrace stack) get recordError =>
+      FirebaseCrashlytics.instance.recordError;
+
+  static FlutterExceptionHandler get recordFlutterError =>
+      FirebaseCrashlytics.instance.recordFlutterError;
 }
