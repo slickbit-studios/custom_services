@@ -15,27 +15,37 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$Message {
+mixin _$NotificationMessage {
+  bool get empty =>
+      throw _privateConstructorUsedError; // is the notification part empty
   String? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get body => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get data => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $MessageCopyWith<Message> get copyWith => throw _privateConstructorUsedError;
+  $NotificationMessageCopyWith<NotificationMessage> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MessageCopyWith<$Res> {
-  factory $MessageCopyWith(Message value, $Res Function(Message) then) =
-      _$MessageCopyWithImpl<$Res, Message>;
+abstract class $NotificationMessageCopyWith<$Res> {
+  factory $NotificationMessageCopyWith(
+          NotificationMessage value, $Res Function(NotificationMessage) then) =
+      _$NotificationMessageCopyWithImpl<$Res, NotificationMessage>;
   @useResult
-  $Res call({String? id, String? title, String? body});
+  $Res call(
+      {bool empty,
+      String? id,
+      String? title,
+      String? body,
+      Map<String, dynamic>? data});
 }
 
 /// @nodoc
-class _$MessageCopyWithImpl<$Res, $Val extends Message>
-    implements $MessageCopyWith<$Res> {
-  _$MessageCopyWithImpl(this._value, this._then);
+class _$NotificationMessageCopyWithImpl<$Res, $Val extends NotificationMessage>
+    implements $NotificationMessageCopyWith<$Res> {
+  _$NotificationMessageCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -45,11 +55,17 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? empty = null,
     Object? id = freezed,
     Object? title = freezed,
     Object? body = freezed,
+    Object? data = freezed,
   }) {
     return _then(_value.copyWith(
+      empty: null == empty
+          ? _value.empty
+          : empty // ignore: cast_nullable_to_non_nullable
+              as bool,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -62,35 +78,52 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
               as String?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
-  factory _$$_MessageCopyWith(
-          _$_Message value, $Res Function(_$_Message) then) =
-      __$$_MessageCopyWithImpl<$Res>;
+abstract class _$$_NotificationMessageCopyWith<$Res>
+    implements $NotificationMessageCopyWith<$Res> {
+  factory _$$_NotificationMessageCopyWith(_$_NotificationMessage value,
+          $Res Function(_$_NotificationMessage) then) =
+      __$$_NotificationMessageCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? id, String? title, String? body});
+  $Res call(
+      {bool empty,
+      String? id,
+      String? title,
+      String? body,
+      Map<String, dynamic>? data});
 }
 
 /// @nodoc
-class __$$_MessageCopyWithImpl<$Res>
-    extends _$MessageCopyWithImpl<$Res, _$_Message>
-    implements _$$_MessageCopyWith<$Res> {
-  __$$_MessageCopyWithImpl(_$_Message _value, $Res Function(_$_Message) _then)
+class __$$_NotificationMessageCopyWithImpl<$Res>
+    extends _$NotificationMessageCopyWithImpl<$Res, _$_NotificationMessage>
+    implements _$$_NotificationMessageCopyWith<$Res> {
+  __$$_NotificationMessageCopyWithImpl(_$_NotificationMessage _value,
+      $Res Function(_$_NotificationMessage) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? empty = null,
     Object? id = freezed,
     Object? title = freezed,
     Object? body = freezed,
+    Object? data = freezed,
   }) {
-    return _then(_$_Message(
+    return _then(_$_NotificationMessage(
+      empty: null == empty
+          ? _value.empty
+          : empty // ignore: cast_nullable_to_non_nullable
+              as bool,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -103,59 +136,92 @@ class __$$_MessageCopyWithImpl<$Res>
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
               as String?,
+      data: freezed == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_Message implements _Message {
-  const _$_Message({this.id, this.title, this.body});
+class _$_NotificationMessage implements _NotificationMessage {
+  const _$_NotificationMessage(
+      {required this.empty,
+      this.id,
+      this.title,
+      this.body,
+      final Map<String, dynamic>? data})
+      : _data = data;
 
+  @override
+  final bool empty;
+// is the notification part empty
   @override
   final String? id;
   @override
   final String? title;
   @override
   final String? body;
+  final Map<String, dynamic>? _data;
+  @override
+  Map<String, dynamic>? get data {
+    final value = _data;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
-    return 'Message(id: $id, title: $title, body: $body)';
+    return 'NotificationMessage(empty: $empty, id: $id, title: $title, body: $body, data: $data)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Message &&
+            other is _$_NotificationMessage &&
+            (identical(other.empty, empty) || other.empty == empty) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.body, body) || other.body == body));
+            (identical(other.body, body) || other.body == body) &&
+            const DeepCollectionEquality().equals(other._data, _data));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, body);
+  int get hashCode => Object.hash(runtimeType, empty, id, title, body,
+      const DeepCollectionEquality().hash(_data));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_MessageCopyWith<_$_Message> get copyWith =>
-      __$$_MessageCopyWithImpl<_$_Message>(this, _$identity);
+  _$$_NotificationMessageCopyWith<_$_NotificationMessage> get copyWith =>
+      __$$_NotificationMessageCopyWithImpl<_$_NotificationMessage>(
+          this, _$identity);
 }
 
-abstract class _Message implements Message {
-  const factory _Message(
-      {final String? id, final String? title, final String? body}) = _$_Message;
+abstract class _NotificationMessage implements NotificationMessage {
+  const factory _NotificationMessage(
+      {required final bool empty,
+      final String? id,
+      final String? title,
+      final String? body,
+      final Map<String, dynamic>? data}) = _$_NotificationMessage;
 
   @override
+  bool get empty;
+  @override // is the notification part empty
   String? get id;
   @override
   String? get title;
   @override
   String? get body;
   @override
+  Map<String, dynamic>? get data;
+  @override
   @JsonKey(ignore: true)
-  _$$_MessageCopyWith<_$_Message> get copyWith =>
+  _$$_NotificationMessageCopyWith<_$_NotificationMessage> get copyWith =>
       throw _privateConstructorUsedError;
 }
