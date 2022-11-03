@@ -16,6 +16,9 @@ class NotificationHandler {
     );
   }
 
+  static Future<String?> getToken(String key) =>
+      FirebaseMessaging.instance.getToken(vapidKey: key);
+
   static Message _transformMessage(RemoteMessage message) {
     return Message(
       id: message.messageId,
