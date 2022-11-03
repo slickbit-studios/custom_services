@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 class Logger {
   static Logger? _instance;
 
-  bool Function() checkReportsAccepted;
   Future<String?> Function()? retrieveUserId;
 
   static Logger get instance {
@@ -20,21 +19,15 @@ class Logger {
     }
   }
 
-  static initialize({
-    required bool Function() checkReportsAccepted,
-    Future<String?> Function()? retrieveUserId,
-  }) {
-    _instance = Logger._(
-      checkReportsAccepted: checkReportsAccepted,
-      retrieveUserId: retrieveUserId,
-    );
+  static initialize({Future<String?> Function()? retrieveUserId}) {
+    _instance = Logger._(retrieveUserId: retrieveUserId);
   }
 
-  Logger._({required this.checkReportsAccepted, this.retrieveUserId});
+  Logger._({this.retrieveUserId});
 
   void error({Type? module, required String message, StackTrace? stack}) {
     _log(severity: "error", module: module, message: message, stack: stack);
-    if (!kIsWeb && kReleaseMode && checkReportsAccepted()) {
+    if (!kIsWeb && kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
@@ -75,7 +68,7 @@ class Logger {
       } else {
         log(formatter.convert(object), name: '${module ?? ''}');
       }
-    } else if (!kIsWeb && checkReportsAccepted()) {
+    } else if (!kIsWeb && isSendEnabled) {
       String? uid = await retrieveUserId?.call();
 
       if (uid != null) {
@@ -90,9 +83,20 @@ class Logger {
     }
   }
 
-  static void Function(Object error, StackTrace stack) get recordError =>
-      FirebaseCrashlytics.instance.recordError;
+  static void recordError(Object error, StackTrace stack) {
+    if (!kIsWeb && kReleaseMode && isSendEnabled) {
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    } else {
+      instance.error(module: Logger, message: '$error', stack: stack);
+    }
+  }
 
   static FlutterExceptionHandler get recordFlutterError =>
       FirebaseCrashlytics.instance.recordFlutterError;
+
+  static void enableSendReports(bool enabled) =>
+      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enabled);
+
+  static bool get isSendEnabled =>
+      FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
 }
