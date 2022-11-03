@@ -15,10 +15,10 @@ dependencies:
 
   http: ^0.13.5
   firebase_core: ^2.1.1
-  firebase_analytics: ^10.0.3
-  firebase_crashlytics: ^3.0.3
-  firebase_database: ^10.0.3
-  firebase_messaging: ^14.0.3
+  firebase_analytics: ^10.0.4
+  firebase_crashlytics: ^3.0.4
+  firebase_database: ^10.0.4
+  firebase_messaging: ^14.0.4
   in_app_purchase: ^3.0.8
   in_app_purchase_android: ^0.2.3+6
   in_app_purchase_storekit: ^0.3.3

@@ -36,7 +36,7 @@ class AdService {
         }
       },
       (FormError error) {
-        Logger.instance.error(
+        Logger.error(
           module: runtimeType,
           message: 'Error loading consent form${error.message}',
         );
@@ -53,7 +53,7 @@ class AdService {
         }
       },
       (FormError formError) {
-        Logger.instance.error(
+        Logger.error(
           module: runtimeType,
           message: 'Failed to load ad consent form: ${formError.message}',
         );
@@ -63,8 +63,6 @@ class AdService {
 
   void loadBannerAd({AdSize size = AdSize.fluid}) {
     assert(bannerAdId != null, 'Requested banner ad but no ad id is set');
-
-    var logger = Logger.instance;
 
     _bannerLoading = true;
 
@@ -78,13 +76,13 @@ class AdService {
           _bannerLoading = false;
         },
         onAdClosed: (ad) => _bannerAd = null,
-        onAdClicked: (ad) => logger.warning(
+        onAdClicked: (ad) => Logger.warning(
           module: runtimeType,
           message: 'Banner ad tapped',
         ),
         onAdFailedToLoad: (ad, error) {
           _bannerLoading = false;
-          logger.warning(
+          Logger.warning(
             module: runtimeType,
             message: 'Ad failed to load ${error.message}',
           );
@@ -127,7 +125,6 @@ class AdService {
       'Requested interstitial but missing ad id',
     );
 
-    var logger = Logger.instance;
     _interstitialLoading = true;
 
     InterstitialAd.load(
@@ -141,7 +138,7 @@ class AdService {
           _interstitialAd?.fullScreenContentCallback =
               FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) => _bannerAd = null,
-            onAdClicked: (ad) => logger.warning(
+            onAdClicked: (ad) => Logger.warning(
               module: runtimeType,
               message: 'Banner ad tapped',
             ),
@@ -149,7 +146,7 @@ class AdService {
         },
         onAdFailedToLoad: (error) {
           _interstitialLoading = false;
-          logger.warning(
+          Logger.warning(
             module: runtimeType,
             message: 'Ad failed to load ${error.message}',
           );

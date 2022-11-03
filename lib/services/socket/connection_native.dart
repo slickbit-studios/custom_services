@@ -76,7 +76,7 @@ class NativeSocketConnection extends SocketConnection {
   }) async {
     // if already connected, just perform the connectedCallback
     if (_state == BackendState.STATE_CONNECTED) {
-      Logger.instance.info(
+      Logger.info(
         module: runtimeType,
         message: 'No new connection was established, because STATE_CONNECTED',
       );

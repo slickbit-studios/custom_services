@@ -11,7 +11,7 @@ class Logger {
 
   Future<String?> Function()? retrieveUserId;
 
-  static Logger get instance {
+  static Logger get _checkedInstance {
     if (_instance == null) {
       throw LoggerException();
     } else {
@@ -25,19 +25,21 @@ class Logger {
 
   Logger._({this.retrieveUserId});
 
-  void error({Type? module, required String message, StackTrace? stack}) {
-    _log(severity: "error", module: module, message: message, stack: stack);
+  static void error(
+      {Type? module, required String message, StackTrace? stack}) {
+    _checkedInstance._log(
+        severity: "error", module: module, message: message, stack: stack);
     if (!kIsWeb && kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
 
-  void warning({Type? module, required String message}) {
-    _log(severity: "warn", module: module, message: message);
+  static void warning({Type? module, required String message}) {
+    _checkedInstance._log(severity: "warn", module: module, message: message);
   }
 
-  void info({Type? module, required String message}) {
-    _log(severity: "info", module: module, message: message);
+  static void info({Type? module, required String message}) {
+    _checkedInstance._log(severity: "info", module: module, message: message);
   }
 
   void _log({
@@ -87,7 +89,7 @@ class Logger {
     if (!kIsWeb && kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(error, stack);
     } else {
-      instance.error(module: Logger, message: '$error', stack: stack);
+      Logger.error(module: Logger, message: '$error', stack: stack);
     }
   }
 
