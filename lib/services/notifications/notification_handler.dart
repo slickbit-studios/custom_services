@@ -16,8 +16,21 @@ class NotificationHandler {
     );
   }
 
-  static Future<String?> getToken(String key) =>
+  static Future<String?> getToken(String? key) =>
       FirebaseMessaging.instance.getToken(vapidKey: key);
+
+  static Future<bool> requestPermission(String? key) async =>
+      (await FirebaseMessaging.instance.requestPermission())
+          .authorizationStatus ==
+      AuthorizationStatus.authorized;
+
+  static Future<void> subscribeTopic(String topic, bool subscribe) async {
+    if (subscribe) {
+      await FirebaseMessaging.instance.subscribeToTopic(topic);
+    } else {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+    }
+  }
 
   static Message _transformMessage(RemoteMessage message) {
     return Message(
