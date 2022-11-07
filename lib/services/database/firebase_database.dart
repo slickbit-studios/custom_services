@@ -14,7 +14,7 @@ class DatabaseNode {
 
   Future<int> get intValue async {
     try {
-      return (await _query.once()) as int;
+      return (await _query.once()).snapshot.value as int;
     } catch (err) {
       throw 'Failed to get int value from database at node ${_query.path}';
     }
@@ -22,7 +22,7 @@ class DatabaseNode {
 
   Future<bool> get boolValue async {
     try {
-      return (await _query.once()) as bool;
+      return (await _query.once()).snapshot.value as bool;
     } catch (err) {
       throw 'Failed to get bool value from database at node ${_query.path}';
     }
@@ -30,7 +30,7 @@ class DatabaseNode {
 
   Future<String> get stringValue async {
     try {
-      return (await _query.once()) as String;
+      return (await _query.once()).snapshot.value as String;
     } catch (err) {
       throw 'Failed to get String value from database at node ${_query.path}';
     }
