@@ -25,13 +25,15 @@ abstract class StripePurchaseService extends PurchaseService {
 
     var session = await createSession(product.id);
 
-    await redirectToCheckout(
-      context: context,
-      sessionId: session.id,
-      publishableKey: publishableKey,
-      successUrl: session.successUrl,
-      canceledUrl: session.cancelUrl,
-    );
+    if (context.mounted) {
+      await redirectToCheckout(
+        context: context,
+        sessionId: session.id,
+        publishableKey: publishableKey,
+        successUrl: session.successUrl,
+        canceledUrl: session.cancelUrl,
+      );
+    }
 
     return false;
   }
