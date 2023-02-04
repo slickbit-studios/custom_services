@@ -100,5 +100,5 @@ class Logger {
       FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enabled);
 
   static bool get isSendEnabled =>
-      FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
+      !kIsWeb && FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
 }
