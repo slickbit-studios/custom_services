@@ -96,8 +96,11 @@ class Logger {
   static FlutterExceptionHandler get recordFlutterError =>
       FirebaseCrashlytics.instance.recordFlutterError;
 
-  static void enableSendReports(bool enabled) =>
+  static void enableSendReports(bool enabled) {
+    if (!kIsWeb) {
       FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enabled);
+    }
+  }
 
   static bool get isSendEnabled =>
       !kIsWeb && FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
