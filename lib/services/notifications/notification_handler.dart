@@ -16,8 +16,14 @@ class NotificationHandler {
     );
   }
 
-  static Future<String?> getToken(String? key) =>
-      FirebaseMessaging.instance.getToken(vapidKey: key);
+  static Future<String?> getToken(String? key) async {
+    try {
+      return FirebaseMessaging.instance.getToken(vapidKey: key);
+    } catch (err) {
+      // result may be null, e.g. when permission for notifications not granted
+      return null;
+    }
+  }
 
   static Future<bool> requestPermission() async =>
       (await FirebaseMessaging.instance.requestPermission())
