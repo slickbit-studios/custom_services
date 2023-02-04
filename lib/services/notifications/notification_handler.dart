@@ -18,7 +18,7 @@ class NotificationHandler {
 
   static Future<String?> getToken(String? key) async {
     try {
-      return FirebaseMessaging.instance.getToken(vapidKey: key);
+      return await FirebaseMessaging.instance.getToken(vapidKey: key);
     } catch (err) {
       // result may be null, e.g. when permission for notifications not granted
       return null;
