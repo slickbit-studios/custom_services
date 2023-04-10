@@ -17,10 +17,13 @@ class RestHandler {
   Future<http.Response> get({
     String extension = '/',
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
+      Uri uri = Uri.parse(url + extension).replace(
+        queryParameters: queryParameters,
+      );
 
       http.Response res =
           await http.get(uri, headers: headers).timeout(timeout);
@@ -41,11 +44,14 @@ class RestHandler {
   Future<http.Response> post({
     String extension = '/',
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Object body = const {},
     Duration timeout = DEFAULT_TIMEOUT,
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
+      Uri uri = Uri.parse(url + extension).replace(
+        queryParameters: queryParameters,
+      );
 
       http.Response res = await http
           .post(
@@ -71,11 +77,14 @@ class RestHandler {
   Future<http.Response> put({
     String extension = '/',
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Duration timeout = DEFAULT_TIMEOUT,
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
+      Uri uri = Uri.parse(url + extension).replace(
+        queryParameters: queryParameters,
+      );
 
       http.Response res = await http
           .put(
@@ -101,11 +110,14 @@ class RestHandler {
   Future<http.Response> delete({
     String extension = '/',
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Duration timeout = DEFAULT_TIMEOUT,
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
+      Uri uri = Uri.parse(url + extension).replace(
+        queryParameters: queryParameters,
+      );
 
       http.Response res = await http
           .delete(
@@ -131,11 +143,14 @@ class RestHandler {
   Future<http.Response> patch({
     String extension = '/',
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     Duration timeout = DEFAULT_TIMEOUT,
     Object body = const {},
   }) async {
     try {
-      Uri uri = Uri.parse(url + extension);
+      Uri uri = Uri.parse(url + extension).replace(
+        queryParameters: queryParameters,
+      );
 
       http.Response res = await http
           .patch(
