@@ -11,6 +11,7 @@ class WebSocketConnection extends SocketConnection {
   final Duration timeout;
   final Duration retryReconnectDuration;
   final int retryAttempts;
+
   // is passed in HTTP request as Sec-WebSocket-Protocol header
   final String? secondaryProtocol;
 
@@ -77,7 +78,7 @@ class WebSocketConnection extends SocketConnection {
   }) async {
     // if already connected, just perform the connectedCallback
     if (_state != BackendState.STATE_DISCONNECTED) {
-      Logger.info(
+      ServiceLogger.instance.info(
         module: runtimeType,
         message: 'No new connection was established, because STATE_CONNECTED',
       );

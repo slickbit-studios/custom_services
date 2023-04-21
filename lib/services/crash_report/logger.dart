@@ -1,45 +1,61 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:math' as math;
 
-import 'package:custom_services/services/crash_report/exception.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
-class Logger {
+class ServiceLogger {
   static Logger? _instance;
 
+  void initialize(Logger logger) {
+    _instance = logger;
+  }
+
+  static Logger get instance {
+    if (_instance == null) {
+      throw "Service Logger has not been initialized";
+    }
+    return _instance!;
+  }
+}
+
+abstract class Logger {
+  void error({Type? module, required String message, StackTrace? stack});
+
+  void warning({Type? module, required String message});
+
+  void info({Type? module, required String message});
+
+  void recordError(Object error, StackTrace stack);
+
+  FlutterExceptionHandler get recordFlutterError;
+
+  Future<void> enableSendReports(bool enabled);
+
+  bool get isSendEnabled;
+}
+
+class FirebaseLogger extends Logger {
   Future<String?> Function()? retrieveUserId;
 
-  static Logger get _checkedInstance {
-    if (_instance == null) {
-      throw LoggerException();
-    } else {
-      return _instance!;
-    }
-  }
+  FirebaseLogger({this.retrieveUserId});
 
-  static initialize({Future<String?> Function()? retrieveUserId}) {
-    _instance = Logger._(retrieveUserId: retrieveUserId);
-  }
-
-  Logger._({this.retrieveUserId});
-
-  static void error(
-      {Type? module, required String message, StackTrace? stack}) {
-    _checkedInstance._log(
-        severity: "error", module: module, message: message, stack: stack);
+  @override
+  void error({Type? module, required String message, StackTrace? stack}) {
+    _log(severity: "error", module: module, message: message, stack: stack);
     if (!kIsWeb && kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
 
-  static void warning({Type? module, required String message}) {
-    _checkedInstance._log(severity: "warn", module: module, message: message);
+  @override
+  void warning({Type? module, required String message}) {
+    _log(severity: "warn", module: module, message: message);
   }
 
-  static void info({Type? module, required String message}) {
-    _checkedInstance._log(severity: "info", module: module, message: message);
+  @override
+  void info({Type? module, required String message}) {
+    _log(severity: "info", module: module, message: message);
   }
 
   void _log({
@@ -57,20 +73,8 @@ class Logger {
     JsonEncoder formatter = const JsonEncoder.withIndent(' ');
 
     if (kDebugMode) {
-      String pretty = formatter.convert(object);
-
-      if (kIsWeb) {
-        // web truncates messages, so split message
-        while (pretty.isNotEmpty) {
-          String part = pretty.substring(0, math.min(pretty.length, 80));
-          log(part, name: '${module ?? ''}');
-
-          pretty = pretty.substring(part.length);
-        }
-      } else {
-        log(formatter.convert(object), name: '${module ?? ''}');
-      }
-    } else if (!kIsWeb && isSendEnabled) {
+      log(formatter.convert(object), name: '${module ?? ''}');
+    } else if (!isSendEnabled) {
       String? uid = await retrieveUserId?.call();
 
       if (uid != null) {
@@ -85,23 +89,24 @@ class Logger {
     }
   }
 
-  static void recordError(Object error, StackTrace stack) {
-    if (!kIsWeb && kReleaseMode && isSendEnabled) {
+  @override
+  void recordError(Object error, StackTrace stack) {
+    if (kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(error, stack);
     } else {
-      Logger.error(module: Logger, message: '$error', stack: stack);
+      this.error(module: FirebaseLogger, message: '$error', stack: stack);
     }
   }
 
-  static FlutterExceptionHandler get recordFlutterError =>
+  @override
+  FlutterExceptionHandler get recordFlutterError =>
       FirebaseCrashlytics.instance.recordFlutterError;
 
-  static void enableSendReports(bool enabled) {
-    if (!kIsWeb) {
+  @override
+  Future<void> enableSendReports(bool enabled) =>
       FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enabled);
-    }
-  }
 
-  static bool get isSendEnabled =>
-      !kIsWeb && FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
+  @override
+  bool get isSendEnabled =>
+      FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
 }
