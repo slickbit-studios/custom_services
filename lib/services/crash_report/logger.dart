@@ -26,7 +26,10 @@ abstract class Logger {
 
   void recordError(Object error, StackTrace stack);
 
-  FlutterExceptionHandler get recordFlutterError;
+  Future<void> recordFlutterError(
+    FlutterErrorDetails flutterErrorDetails, {
+    bool fatal = false,
+  });
 
   Future<void> enableSendReports(bool enabled);
 
@@ -41,7 +44,7 @@ class FirebaseLogger extends Logger {
   @override
   void error({Type? module, required String message, StackTrace? stack}) {
     _log(severity: "error", module: module, message: message, stack: stack);
-    if (!kIsWeb && kReleaseMode && isSendEnabled) {
+    if (kReleaseMode && isSendEnabled) {
       FirebaseCrashlytics.instance.recordError(message, stack);
     }
   }
@@ -88,17 +91,18 @@ class FirebaseLogger extends Logger {
   }
 
   @override
-  void recordError(Object error, StackTrace stack) {
-    if (kReleaseMode && isSendEnabled) {
-      FirebaseCrashlytics.instance.recordError(error, stack);
-    } else {
+  void recordError(Object error, StackTrace stack) =>
       this.error(module: FirebaseLogger, message: '$error', stack: stack);
-    }
-  }
 
   @override
-  FlutterExceptionHandler get recordFlutterError =>
-      FirebaseCrashlytics.instance.recordFlutterError;
+  Future<void> recordFlutterError(
+    FlutterErrorDetails flutterErrorDetails, {
+    bool fatal = false,
+  }) =>
+      FirebaseCrashlytics.instance.recordFlutterError(
+        flutterErrorDetails,
+        fatal: fatal,
+      );
 
   @override
   Future<void> enableSendReports(bool enabled) =>
