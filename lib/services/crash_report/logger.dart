@@ -7,9 +7,7 @@ import 'package:flutter/foundation.dart';
 class ServiceLogger {
   static Logger? _instance;
 
-  static void initialize(Logger logger) {
-    _instance = logger;
-  }
+  static void initialize(Logger logger) => _instance = logger;
 
   static Logger get instance {
     if (_instance == null) {
