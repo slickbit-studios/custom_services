@@ -1,5 +1,5 @@
 abstract class RestConfig {
-  RestConfig._();
+  RestConfig();
 
   // individual getters
   String get url;
