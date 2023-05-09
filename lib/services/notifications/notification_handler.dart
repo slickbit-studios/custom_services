@@ -1,20 +1,47 @@
 import 'package:custom_services/services/notifications/message.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+Future<void> _onBackgroundMessage(RemoteMessage message) =>
+    NotificationHandler.handleMessage(message, true);
+
+Future<void> _onForegroundMessage(RemoteMessage message) =>
+    NotificationHandler.handleMessage(message, false);
+
+typedef NotificationHandlingMethod = Future<void> Function(
+    NotificationMessage message, bool background);
+
 class NotificationHandler {
-  static void onBackgroundMessage(
-      Future<void> Function(NotificationMessage message) onMessage) {
-    FirebaseMessaging.onBackgroundMessage(
-      (message) => onMessage(_transformMessage(message)),
-    );
+  static NotificationMessage _transformMessage(RemoteMessage message) =>
+      NotificationMessage(
+        id: message.messageId,
+        empty: message.notification == null,
+        title: message.notification?.title,
+        body: message.notification?.body,
+        data: message.data,
+      );
+
+  static NotificationHandlingMethod? _messageHandler;
+
+  static void setMessageHandler(
+    Future<void> Function(NotificationMessage message, bool background) handler,
+  ) async {
+    _messageHandler = handler;
+    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+    FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+  }
+
+  static Future<void> handleMessage(
+    RemoteMessage message,
+    bool background,
+  ) async {
+    if (_messageHandler == null) {
+      return;
+    }
+    return _messageHandler!.call(_transformMessage(message), background);
   }
 
   static void onForegroundMessage(
-      Future<void> Function(NotificationMessage message) onMessage) {
-    FirebaseMessaging.onMessage.listen(
-      (message) => onMessage(_transformMessage(message)),
-    );
-  }
+      Future<void> Function(NotificationMessage message) onMessage) {}
 
   static Future<String?> getToken(String? key) async {
     try {
@@ -36,15 +63,5 @@ class NotificationHandler {
     } else {
       await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
     }
-  }
-
-  static NotificationMessage _transformMessage(RemoteMessage message) {
-    return NotificationMessage(
-      id: message.messageId,
-      empty: message.notification == null,
-      title: message.notification?.title,
-      body: message.notification?.body,
-      data: message.data,
-    );
   }
 }
