@@ -22,9 +22,7 @@ class NotificationHandler {
 
   static NotificationHandlingMethod? _messageHandler;
 
-  static void setMessageHandler(
-    Future<void> Function(NotificationMessage message, bool background) handler,
-  ) async {
+  static void setMessageHandler(NotificationHandlingMethod handler) async {
     _messageHandler = handler;
 
     // provided function must be top level (not in class)
@@ -41,9 +39,6 @@ class NotificationHandler {
     }
     return _messageHandler!.call(_transformMessage(message), background);
   }
-
-  static void onForegroundMessage(
-      Future<void> Function(NotificationMessage message) onMessage) {}
 
   static Future<String?> getToken(String? key) async {
     try {
