@@ -26,6 +26,8 @@ class NotificationHandler {
     Future<void> Function(NotificationMessage message, bool background) handler,
   ) async {
     _messageHandler = handler;
+
+    // provided function must be top level (not in class)
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
     FirebaseMessaging.onMessage.listen(_onForegroundMessage);
   }
