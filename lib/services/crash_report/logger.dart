@@ -105,8 +105,11 @@ class FirebaseLogger extends Logger {
       );
 
   @override
-  Future<void> enableSendReports(bool enabled) =>
+  Future<void> enableSendReports(bool enabled) async {
+    if (isSendEnabled) {
       FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enabled);
+    }
+  }
 
   @override
   bool get isSendEnabled =>
