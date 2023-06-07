@@ -1,11 +1,11 @@
-enum ProductType {
+enum ConsumptionType {
   permanent,
   consumable,
 }
 
 class Product {
   final String id;
-  final ProductType type;
+  final ConsumptionType type;
 
   const Product(this.id, this.type);
 }

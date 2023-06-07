@@ -48,7 +48,7 @@ abstract class NativePurchaseService extends PurchaseService {
       }
     }
 
-    if (product.type == ProductType.consumable) {
+    if (product.type == ConsumptionType.consumable) {
       return _purchase.buyConsumable(purchaseParam: param);
     } else {
       return _purchase.buyNonConsumable(purchaseParam: param);
