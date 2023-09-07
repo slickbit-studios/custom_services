@@ -1,6 +1,9 @@
 import 'package:custom_services/services/notifications/message.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+typedef NotificationHandlingMethod = Future<void> Function(
+    NotificationMessage message, bool background);
+
 class NotificationHandler {
   static NotificationMessage transformMessage(RemoteMessage message) =>
       NotificationMessage(
