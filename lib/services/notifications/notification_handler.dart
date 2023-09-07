@@ -1,17 +1,8 @@
 import 'package:custom_services/services/notifications/message.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> _onBackgroundMessage(RemoteMessage message) =>
-    NotificationHandler.handleMessage(message, true);
-
-Future<void> _onForegroundMessage(RemoteMessage message) =>
-    NotificationHandler.handleMessage(message, false);
-
-typedef NotificationHandlingMethod = Future<void> Function(
-    NotificationMessage message, bool background);
-
 class NotificationHandler {
-  static NotificationMessage _transformMessage(RemoteMessage message) =>
+  static NotificationMessage transformMessage(RemoteMessage message) =>
       NotificationMessage(
         id: message.messageId,
         empty: message.notification == null,
@@ -19,26 +10,6 @@ class NotificationHandler {
         body: message.notification?.body,
         data: message.data,
       );
-
-  static NotificationHandlingMethod? _messageHandler;
-
-  static void setMessageHandler(NotificationHandlingMethod handler) async {
-    _messageHandler = handler;
-
-    // provided function must be top level (not in class)
-    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
-    FirebaseMessaging.onMessage.listen(_onForegroundMessage);
-  }
-
-  static Future<void> handleMessage(
-    RemoteMessage message,
-    bool background,
-  ) async {
-    if (_messageHandler == null) {
-      return;
-    }
-    return _messageHandler!.call(_transformMessage(message), background);
-  }
 
   static Future<String?> getToken(String? key) async {
     try {
