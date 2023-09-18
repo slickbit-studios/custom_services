@@ -34,7 +34,8 @@ class FlavorConfig {
       }
     }
 
-    throw 'The flavor $_flavorName set in env parameter $_envFlavor does not exist.';
+    // default to prod
+    _instance = FlavorConfig._(_Flavor.prod);
   }
 
   static String get _flavorName {
