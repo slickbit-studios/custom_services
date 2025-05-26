@@ -2,7 +2,6 @@ import 'package:custom_services/services/purchases/product.dart';
 import 'package:custom_services/services/purchases/purchase.dart';
 import 'package:custom_services/services/purchases/stripe/session.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stripe_checkout/stripe_checkout.dart';
 
 import '../service.dart';
 
@@ -23,16 +22,19 @@ abstract class StripePurchaseService extends PurchaseService {
 
     onPurchaseUpdated(purchase);
 
+    // ignore: unused_local_variable
     var session = await createSession(product.id);
 
     if (context.mounted) {
-      await redirectToCheckout(
-        context: context,
-        sessionId: session.id,
-        publishableKey: publishableKey,
-        successUrl: session.successUrl,
-        canceledUrl: session.cancelUrl,
-      );
+      // TODO: DEPRECATED
+
+      // await redirectToCheckout(
+      //   context: context,
+      //   sessionId: session.id,
+      //   publishableKey: publishableKey,
+      //   successUrl: session.successUrl,
+      //   canceledUrl: session.cancelUrl,
+      // );
     }
 
     return false;

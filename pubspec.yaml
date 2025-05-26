@@ -24,8 +24,7 @@ dependencies:
   in_app_purchase_android: ^0.4.0+1
   in_app_purchase_storekit: ^0.4.0
   in_app_purchase_platform_interface: ^1.3.5
-  google_mobile_ads: ^2.4.0
-  stripe_checkout: ^1.0.2
+  google_mobile_ads: ^6.0.0
   url_launcher: ^6.3.1
   universal_html: ^2.2.4
   json_annotation: ^4.8.1
