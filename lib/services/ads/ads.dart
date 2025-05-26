@@ -188,14 +188,12 @@ class IosTestAdService extends AdService {
 
   IosTestAdService({
     bool banners = true,
-    int bannerFrequency = 30,
+    super.bannerFrequency,
     bool interstitials = true,
-    int interstitialFrequency = 30,
+    super.interstitialFrequency,
   }) : super(
           bannerAdId: banners ? _banner : null,
-          bannerFrequency: bannerFrequency,
           interstitialAdId: interstitials ? _interstitial : null,
-          interstitialFrequency: interstitialFrequency,
         );
 }
 
@@ -205,13 +203,11 @@ class AndroidTestAdService extends AdService {
 
   AndroidTestAdService({
     bool banners = true,
-    int bannerFrequency = 30,
+    super.bannerFrequency,
     bool interstitials = true,
-    int interstitialFrequency = 30,
+    super.interstitialFrequency,
   }) : super(
           bannerAdId: banners ? _banner : null,
-          bannerFrequency: bannerFrequency,
           interstitialAdId: interstitials ? _interstitial : null,
-          interstitialFrequency: interstitialFrequency,
         );
 }

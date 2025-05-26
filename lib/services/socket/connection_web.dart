@@ -21,13 +21,13 @@ class WebSocketConnection extends SocketConnection {
 
   WebSocketConnection({
     required this.url,
-    VoidCallback? onDisconnected,
+    super.onDisconnected,
     this.pingInterval = const Duration(seconds: 10),
     this.timeout = const Duration(seconds: 20),
     this.retryReconnectDuration = const Duration(seconds: 1),
     this.retryAttempts = 15,
     this.secondaryProtocol,
-  }) : super(onDisconnected: onDisconnected);
+  });
 
   @override
   Future<void> connect({String path = '', Duration? timeout}) async {

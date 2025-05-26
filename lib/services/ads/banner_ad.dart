@@ -5,7 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class BannerAdView extends StatefulWidget {
   final AdService service;
 
-  const BannerAdView({Key? key, required this.service}) : super(key: key);
+  const BannerAdView({super.key, required this.service});
 
   @override
   State<BannerAdView> createState() => _BannerAdViewState();
